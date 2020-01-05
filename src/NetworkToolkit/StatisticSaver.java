@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 
 import org.json.JSONObject;
 
@@ -27,12 +28,12 @@ public class StatisticSaver {
 	public void setFolderName(String name)
 	{
 		m_StatisticFolderName = "data/statistics/"+name+"/";
-		CreateStatisticFolderIfNotExist();
+		CreateFolderIfNotExist(m_StatisticFolderName);
 	}
 	
-	private void CreateStatisticFolderIfNotExist()
+	private void CreateFolderIfNotExist(String foldername)
 	{
-		new File(m_StatisticFolderName).mkdirs();
+		new File(foldername).mkdirs();
 	}
 	
 	private boolean writeFile(String filename,String content)
@@ -66,10 +67,6 @@ public class StatisticSaver {
 		return true;
 	}
 
-	public void onTestFinish() {
-		
-	}
-
 	public void saveStatisticFile(String filename, JSONObject json) {
 		saveStatisticFile(filename,json.toString());
 	}
@@ -82,6 +79,48 @@ public class StatisticSaver {
 		}else
 		{
 			System.out.println("Error saving Statistic " + filename + " !");
+		}
+	}
+
+	public void savePerHostSpeedTests(JSONObject speedTests)
+	{
+		
+		Iterator<String> SpeedItr = speedTests.keys();
+		
+		while(SpeedItr.hasNext())
+		{
+			
+			String key = SpeedItr.next();
+			String folder = m_StatisticFolderName+key;
+			CreateFolderIfNotExist(folder);
+			saveStatisticFile(key+"/speedtest.json", speedTests.getJSONObject(key));
+		}
+		
+	}
+
+	public void savePerHostPingTests(JSONObject pingTests)
+	{
+		Iterator<String> PingItr = pingTests.keys();
+		
+		while(PingItr.hasNext())
+		{
+			String key = PingItr.next();
+			String folder = m_StatisticFolderName+key;
+			CreateFolderIfNotExist(folder);
+			saveStatisticFile(key+"/pingtest.json", pingTests.getJSONObject(key));
+		}
+	}
+
+	public void savePerHostTraceTests(JSONObject traceTests) {
+		
+		Iterator<String> TraceItr = traceTests.keys();
+		
+		while(TraceItr.hasNext())
+		{
+			String key = TraceItr.next();
+			String folder = m_StatisticFolderName+key;
+			CreateFolderIfNotExist(folder);
+			saveStatisticFile(key+"/tracetest.json", traceTests.getJSONObject(key));
 		}
 	}
 	

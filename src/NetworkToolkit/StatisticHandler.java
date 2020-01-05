@@ -33,13 +33,19 @@ public class StatisticHandler {
 	
 	public void finishTest()
 	{
-		m_StatisticSaver.saveStatisticFile("AllSpeedTests.json", getSpeedTestStatisticAsJSON());
-		m_StatisticSaver.saveStatisticFile("AllPingTests.json", getPingTestStatisticAsJSON());
-		m_StatisticSaver.saveStatisticFile("AllTraceTests.json", getTraceTestStatisticAsJSON());
+		JSONObject SpeedTests = getSpeedTestStatisticAsJSON();
+		JSONObject PingTests = getSpeedTestStatisticAsJSON();
+		JSONObject TraceTests = getTraceTestStatisticAsJSON();
+		
+		m_StatisticSaver.saveStatisticFile("AllSpeedTests.json", SpeedTests);
+		m_StatisticSaver.saveStatisticFile("AllPingTests.json", PingTests);
+		m_StatisticSaver.saveStatisticFile("AllTraceTests.json", TraceTests);
+		
+		m_StatisticSaver.savePerHostSpeedTests(SpeedTests);
+		m_StatisticSaver.savePerHostPingTests(PingTests);
+		m_StatisticSaver.savePerHostTraceTests(TraceTests);
 		
 		m_StatisticSaver.saveStatisticFile("AllTests.json", getAllTestStatisticsAsJSON());
-		
-		m_StatisticSaver.onTestFinish();
 	}
 	
 	public HashMap<String,HashMap<Integer,Double>> getSpeedTestStatistic()
