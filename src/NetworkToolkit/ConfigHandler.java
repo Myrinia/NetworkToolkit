@@ -116,6 +116,7 @@ public class ConfigHandler {
 			    			
 			    		}
 			    		
+			    		System.out.println("Loading Config Host: " + HostKey + " : "+ hostdata);
 			    		
 			    		m_ConfigHosts.add(set);
 			    	}
