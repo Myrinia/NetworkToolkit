@@ -227,7 +227,7 @@ public class BackgroundTestHandler implements Runnable{
 		if(currenttest == 0)
 			currenttest = 1;
 		
-		m_TotalProgressBar.setValue( 100/ totalTests * currenttest );
+		m_TotalProgressBar.setValue( 100 / totalTests * currenttest );
 	}
 	
 	private void setInformation1(String infos)
