@@ -10,14 +10,15 @@ You can download the source and compile the project on your own or simply downlo
 ## Inspiration
 
 As of me upgrading my Internet Connection and not reaching the full Bandwith on specific hosts, i wanted to dig deeper and found out that it's not only me not reaching the booked speed.
-
+So the idea was born to create this Toolkit, to allow for everyone to test the internet bandwith on real test data, instead of Speedtests.
 
 ```
 ```
+
 ## Disclaimer:
 
 * It's just a private project, so reporting bugs is just fine, but i can't guarantee for it to work
 * No Ads
 * No Malware
 * No Spam 
-* No Junk,  just a simple Speed, Ping, Tracetester
+* No Junk..,  just a simple Speed, Ping, Tracetester
