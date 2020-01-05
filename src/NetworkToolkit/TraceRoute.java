@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class TraceRoute
 {
@@ -29,34 +30,32 @@ public class TraceRoute
 		}
 	}
 	
-	private String convertStreamToString(InputStream stream)
+	private ArrayList<String> convertStreamToString(InputStream stream)
 	{
-		
-		try( BufferedReader br =
-		           new BufferedReader( new InputStreamReader(stream, StandardCharsets.UTF_8.name() )))
-		   {
-		      StringBuilder sb = new StringBuilder();
-		      String line;
-		      while(( line = br.readLine()) != null ) {
-		    	 sb.append( line );
-		         sb.append( '\n' );
-		         if(!line.equals("")) // If the line is empty, just continue
-		         {
-		        	 System.out.println(">"+line+"<");
-		        	 m_LatestTraceRouteLine = line;
-		         }
-		      }
-		      return sb.toString();
-		   
+		ArrayList<String> streamcontents = new ArrayList<String>();
+		try
+		{
+			BufferedReader br = new BufferedReader( new InputStreamReader(stream, StandardCharsets.UTF_8.name()	) );
+			String line;
+			while(( line = br.readLine()) != null ) {
+				streamcontents.add(line);
+		    	
+				if(!line.equals("")) // If the line is empty, just continue
+		        {
+					System.out.println(">"+line+"<");
+		        	m_LatestTraceRouteLine = line;
+		        }
+			}
 		} catch (Exception e) {
-			return e.toString();
+			System.out.println(e.toString());
 		}
+		return streamcontents;
 	}
 	
-	public String getRoute()
+	public ArrayList<String> getRoute()
 	{
 		System.out.println("Starting trace to: " + m_Host);
-		String route = "";
+		ArrayList<String> route = new ArrayList<String>();
 	    try {
 	        Process traceRt;
 	        if(m_OperatingSystem.contains("win"))

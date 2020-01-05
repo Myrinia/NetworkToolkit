@@ -93,7 +93,7 @@ public class StatisticSaver {
 			String key = SpeedItr.next();
 			String folder = m_StatisticFolderName+key;
 			CreateFolderIfNotExist(folder);
-			saveStatisticFile(key+"/speedtest.json", speedTests.getJSONObject(key));
+			saveStatisticFile(key+"/speedtest.json", new JSONObject().put(key, speedTests.getJSONObject(key)));
 		}
 		
 	}
@@ -107,7 +107,7 @@ public class StatisticSaver {
 			String key = PingItr.next();
 			String folder = m_StatisticFolderName+key;
 			CreateFolderIfNotExist(folder);
-			saveStatisticFile(key+"/pingtest.json", pingTests.getJSONObject(key));
+			saveStatisticFile(key+"/pingtest.json", new JSONObject().put(key, pingTests.getJSONObject(key)));
 		}
 	}
 
@@ -120,7 +120,7 @@ public class StatisticSaver {
 			String key = TraceItr.next();
 			String folder = m_StatisticFolderName+key;
 			CreateFolderIfNotExist(folder);
-			saveStatisticFile(key+"/tracetest.json", traceTests.getJSONObject(key));
+			saveStatisticFile(key+"/tracetest.json", new JSONObject().put(key, traceTests.getJSONArray(key)));
 		}
 	}
 	

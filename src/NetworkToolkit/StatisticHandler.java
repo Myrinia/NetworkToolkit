@@ -3,13 +3,14 @@ package NetworkToolkit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+
 import org.json.JSONObject;
 
 public class StatisticHandler {
 
 	private HashMap<String,HashMap<Integer,Double>> m_SpeedTests;	// HashMap<HostName,HashMap<passedTime,bytesloaded>>
 	private HashMap<String,ArrayList<Long>> m_PingTests; 			// HashMap<HostName,ArrayList<milliseconds>>
-	private HashMap<String,String> m_TraceRoutes;           	// HashMap<Host,Traceroute>
+	private HashMap<String,ArrayList<String>> m_TraceRoutes;           	// HashMap<Host,Traceroute>
 	private StatisticSaver m_StatisticSaver;
 	
 	public StatisticHandler()
@@ -22,7 +23,7 @@ public class StatisticHandler {
 	{
 		m_SpeedTests = new HashMap<String,HashMap<Integer,Double>>();
 		m_PingTests  = new HashMap<String,ArrayList<Long>>();
-		m_TraceRoutes = new HashMap<String,String>();
+		m_TraceRoutes = new HashMap<String,ArrayList<String>>();
 	}
 	
 	public void startTest()
@@ -34,7 +35,7 @@ public class StatisticHandler {
 	public void finishTest()
 	{
 		JSONObject SpeedTests = getSpeedTestStatisticAsJSON();
-		JSONObject PingTests = getSpeedTestStatisticAsJSON();
+		JSONObject PingTests = getPingTestStatisticAsJSON();
 		JSONObject TraceTests = getTraceTestStatisticAsJSON();
 		
 		m_StatisticSaver.saveStatisticFile("AllSpeedTests.json", SpeedTests);
@@ -159,7 +160,7 @@ public class StatisticHandler {
 		while(itrtrace.hasNext())
 		{
 			String key = itrtrace.next();
-			String trace = m_TraceRoutes.get(key);
+			ArrayList<String> trace = m_TraceRoutes.get(key);
 			
 			tracejson.put(key, trace);
 		}
@@ -282,7 +283,7 @@ public class StatisticHandler {
 		while(itrtrace.hasNext())
 		{
 			String host = itrtrace.next();
-			String trace = m_TraceRoutes.get(host);
+			ArrayList<String> trace = m_TraceRoutes.get(host);
 			if( !ret.has(host))
 			{
 				JSONObject tmpar = new JSONObject();
@@ -306,7 +307,7 @@ public class StatisticHandler {
 		m_PingTests.put(hostname, values);
 	}
 	
-	public void addHostTraceroute(String host, String trace)
+	public void addHostTraceroute(String host, ArrayList<String> trace)
 	{
 		m_TraceRoutes.put(host, trace);
 	}
