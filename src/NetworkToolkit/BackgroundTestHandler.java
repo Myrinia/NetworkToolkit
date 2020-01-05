@@ -103,7 +103,14 @@ public class BackgroundTestHandler implements Runnable{
 				DoTraceTest(candidate);
 			}
 		}
+		
+		setHost("Test beendet!");
+		setAction("Test beendet!");
+		setProgressBarStatus(100);
 		setTotalBarStatus( totalteststodo,currenttest );
+		setInformation1("Test Beendet!");
+		setInformation2("Test Beendet!");
+		
 		Main.m_StatisticHandler.finishTest();
 		Main.btnAbortTest.doClick();
 	}
@@ -112,7 +119,7 @@ public class BackgroundTestHandler implements Runnable{
 		if(!m_TestRunning)
 			return;
 		
-		setAction("TraceTest");
+		setAction("TraceTest [ ! slow Test ! ]");
 		setHost(candidate.getHostName());
 		
 		setInformation1("Traceroute to " + candidate.getHostName());
@@ -151,7 +158,7 @@ public class BackgroundTestHandler implements Runnable{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setInformation1("Ping: " + candidate.getHostName() + " for " + d.getLastPing() + " ms.");
-				setInformation2(" FastesPing: "+d.getFastestPing() +  " / SlowestPing: " + d.getSlowestPing());
+				setInformation2(" FastesPing: "+d.getFastestPing() +  " / SlowestPing: " + d.getSlowestPing() +" [Jitter:"+ (d.getSlowestPing() - d.getFastestPing()) +"]");
 				setProgressBarStatus(d.getCurrentPingTestStatus());
 			}
 		};

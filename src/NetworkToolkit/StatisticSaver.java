@@ -42,7 +42,7 @@ public class StatisticSaver {
 		try
 		{
 		    writer = new BufferedWriter( new FileWriter( m_StatisticFolderName + filename ));
-		    writer.write( content);
+		    writer.write( content );
 
 		}
 		catch ( Exception e)
@@ -89,11 +89,11 @@ public class StatisticSaver {
 		
 		while(SpeedItr.hasNext())
 		{
-			
 			String key = SpeedItr.next();
-			String folder = m_StatisticFolderName+key;
+			String folderkey = removeToxicChars(key);
+			String folder = m_StatisticFolderName+folderkey;
 			CreateFolderIfNotExist(folder);
-			saveStatisticFile(key+"/speedtest.json", new JSONObject().put(key, speedTests.getJSONObject(key)));
+			saveStatisticFile(folderkey+"/speedtest.json", new JSONObject().put(key, speedTests.getJSONObject(key)));
 		}
 		
 	}
@@ -105,9 +105,11 @@ public class StatisticSaver {
 		while(PingItr.hasNext())
 		{
 			String key = PingItr.next();
-			String folder = m_StatisticFolderName+key;
+			String folderkey = removeToxicChars(key);
+			
+			String folder = m_StatisticFolderName+folderkey;
 			CreateFolderIfNotExist(folder);
-			saveStatisticFile(key+"/pingtest.json", new JSONObject().put(key, pingTests.getJSONObject(key)));
+			saveStatisticFile(folderkey+"/pingtest.json", new JSONObject().put(key, pingTests.getJSONObject(key)));
 		}
 	}
 
@@ -118,10 +120,20 @@ public class StatisticSaver {
 		while(TraceItr.hasNext())
 		{
 			String key = TraceItr.next();
-			String folder = m_StatisticFolderName+key;
+			String folderkey = removeToxicChars(key);
+			
+			String folder = m_StatisticFolderName+folderkey;
 			CreateFolderIfNotExist(folder);
-			saveStatisticFile(key+"/tracetest.json", new JSONObject().put(key, traceTests.getJSONArray(key)));
+			saveStatisticFile(folderkey+"/tracetest.json", new JSONObject().put(key, traceTests.getJSONArray(key)));
 		}
 	}
 	
+	private String removeToxicChars(String name)
+	{
+		name = name.replace("http://", "");
+		name = name.replace("https://", "");
+		name = name.replace("/", "_");
+		
+		return name;
+	}
 }
