@@ -32,7 +32,7 @@ public class Main {
 
 	private JFrame MainFrame;
 	
-	static ConfigHandler m_ConfigHandler;
+	final static ConfigHandler m_ConfigHandler = new ConfigHandler();;
 	final private TestHandler m_BackgroundTestHandler = new TestHandler();
 	final static JPanel m_StatusPanel = new JPanel();
 	final JPanel m_ConfigPanel = new JPanel();
@@ -50,14 +50,8 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
-					VersionManagement vmgr = new VersionManagement();
-					
-					if(vmgr.isLatestVersion())
-					{
-						Main window = new Main();
-						window.MainFrame.setVisible(true);
-					}
+					Main window = new Main();
+					window.MainFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -73,7 +67,7 @@ public class Main {
 	}
 
 	private void initVariables() {
-		m_ConfigHandler = new ConfigHandler();
+		
 	}
 	
 	/**

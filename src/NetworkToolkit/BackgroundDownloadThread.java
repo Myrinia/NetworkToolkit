@@ -49,16 +49,11 @@ public class BackgroundDownloadThread implements Runnable {
 			    	Main.m_StatisticHandler.addHostSpeed(m_DownloadHostName, m_CurrentRunTime , m_BytesLoaded);
 			        fileOutputStream.write(dataBuffer, 0, bytesRead);
 			    }
-			    
-			    fileOutputStream.flush();
-			    fileOutputStream.close();
-			    
 			} catch (IOException e) {
 				System.out.println("Download Error");
 				m_CountdownTimer.stop();
 			    // handle exception
 			}
-
 			m_CountdownTimer.stop();
 			deleteTestfile();
 		} catch (MalformedURLException e1) {
