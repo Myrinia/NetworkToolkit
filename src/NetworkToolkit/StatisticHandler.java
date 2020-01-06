@@ -8,9 +8,9 @@ import org.json.JSONObject;
 
 public class StatisticHandler {
 
-	private HashMap<String,HashMap<Integer,Double>> m_SpeedTests;	// HashMap<HostName,HashMap<passedTime,bytesloaded>>
+	private HashMap<String,HashMap<Integer,Long>> m_SpeedTests;		// HashMap<HostName,HashMap<passedTime,bytesloaded>>
 	private HashMap<String,ArrayList<Long>> m_PingTests; 			// HashMap<HostName,ArrayList<milliseconds>>
-	private HashMap<String,ArrayList<String>> m_TraceRoutes;           	// HashMap<Host,Traceroute>
+	private HashMap<String,ArrayList<String>> m_TraceRoutes;        // HashMap<Host,Traceroute>
 	private StatisticSaver m_StatisticSaver;
 	
 	public StatisticHandler()
@@ -21,7 +21,7 @@ public class StatisticHandler {
 	
 	public void reset()
 	{
-		m_SpeedTests = new HashMap<String,HashMap<Integer,Double>>();
+		m_SpeedTests = new HashMap<String,HashMap<Integer,Long>>();
 		m_PingTests  = new HashMap<String,ArrayList<Long>>();
 		m_TraceRoutes = new HashMap<String,ArrayList<String>>();
 	}
@@ -49,7 +49,7 @@ public class StatisticHandler {
 		m_StatisticSaver.saveStatisticFile("AllTests.json", getAllTestStatisticsAsJSON());
 	}
 	
-	public HashMap<String,HashMap<Integer,Double>> getSpeedTestStatistic()
+	public HashMap<String,HashMap<Integer,Long>> getSpeedTestStatistic()
 	{
 		return m_SpeedTests;
 	}
@@ -62,33 +62,31 @@ public class StatisticHandler {
 
 		while(val.hasNext()){
 			String host = val.next();
-			float maxMBitps = 0.f;
-			float maxMBps = 0.f;
+			float maxMBitps = 0L;
+			float maxMBps = 0L;
 			
-			float avgMBps = 0.f;
-			float avgMBitps = 0.f;
+			float avgMBps = 0L;
+			float avgMBitps = 0L;
 				
 			JSONObject hostdata = new JSONObject();
 			
 			Iterator<Integer> dd = m_SpeedTests.get(host).keySet().iterator();
 			
-			int speedindexes = 0;
+			float speedindexes = 0;
 			while(dd.hasNext()){
 				int key = dd.next();
-				float mbit;
-				float mbps;
-				Double a = m_SpeedTests.get(host).get(key);
+				float mbit = 0f;
+				float mbps = 0f;
+				Double a = m_SpeedTests.get(host).get(key).doubleValue();
 				
-				if(a.isInfinite())
+				float keyfactor = key / 1000.f;
+				
+				if(keyfactor > 0)
 				{
-					mbit = 0;
-					mbps = 0;
-				}else
-				{
-					mbit = (float) ( (a/1024/1024)* 8 / ((float)key/1000));
-					mbps = (float) ( (a/1000/1000) / ((float)key/1000));
+					mbit =  (((a.floatValue()*8f / keyfactor) / 1024f) / 1024f) ;
+					mbps =  (((a.floatValue()    / keyfactor) / 1024f) / 1024f) ; 
 				}
-
+				
 				if(maxMBitps < mbit)
 					maxMBitps = mbit;
 				
@@ -97,9 +95,12 @@ public class StatisticHandler {
 				
 				avgMBps += mbps;
 				avgMBitps += mbit;
-				speedindexes++;
+				speedindexes += 1.f;
 				hostdata.put(""+key, a);
 			}
+			
+			System.out.println("MaxMB" + maxMBps);
+			System.out.println("maxMBitps" + maxMBitps);
 			
 			hostdata.put("maxMBps",maxMBps);
 			hostdata.put("maxMBitps",maxMBitps);
@@ -107,8 +108,7 @@ public class StatisticHandler {
 			hostdata.put("averageMBitps",avgMBitps/speedindexes);
 			
 			ret.put(host, hostdata);
-			
-			
+
 		}
 		return ret;
 	}
@@ -218,11 +218,11 @@ public class StatisticHandler {
 		
 		while(itrspeed.hasNext()){
 			String host = itrspeed.next();
-			float maxMBitps = 0.f;
-			float maxMBps = 0.f;
+			float maxMBitps = 0L;
+			float maxMBps = 0L;
 			
-			float avgMBps = 0.f;
-			float avgMBitps = 0.f;
+			float avgMBps = 0L;
+			float avgMBitps = 0L;
 			
 			if( !ret.has(host))
 			{
@@ -235,27 +235,26 @@ public class StatisticHandler {
 				ret.put(host, tmpar);
 			}
 			
-			HashMap<Integer,Double> map = m_SpeedTests.get(host);
+			HashMap<Integer,Long> map = m_SpeedTests.get(host);
 			
 			Iterator<Integer> mapitr = map.keySet().iterator();
 			
-			float mbit = 0;
-			float mbps = 0;
+			float mbit = 0f;
+			float mbps = 0f;
 			int speedindexes = 0;
 			while(mapitr.hasNext())
 			{
-				int v = mapitr.next();
-				Double a = map.get(v);
-
-				if(a.isInfinite())
+				int key = mapitr.next();
+				Long a = map.get(key);
+				
+				float keyfactor = key / 1000.f;
+				
+				if(keyfactor > 0)
 				{
-					mbit = 0;
-					mbps = 0;
-				}else
-				{
-					mbit = (float) ( (a/1024/1024)* 8 / ((float)v/1000));
-					mbps = (float) ( (a/1000/1000) / ((float)v/1000));
+					mbit =  (((a.floatValue()*8f / keyfactor) / 1024f) / 1024f) ;
+					mbps =  (((a.floatValue()    / keyfactor) / 1024f) / 1024f) ; 
 				}
+				
 
 				if(maxMBitps < mbit)
 					maxMBitps = mbit;
@@ -267,9 +266,9 @@ public class StatisticHandler {
 				avgMBitps += mbit;
 				speedindexes++;
 				
-				ret.getJSONObject(host).getJSONObject("rawspeeddata").put(""+v,a);
-				ret.getJSONObject(host).getJSONObject("avgspeedMBITps").put(""+v, mbit  );
-				ret.getJSONObject(host).getJSONObject("avgspeedMBps").put(""+v, mbps  );
+				ret.getJSONObject(host).getJSONObject("rawspeeddata").put(""+key,a);
+				ret.getJSONObject(host).getJSONObject("avgspeedMBITps").put(""+key, mbit  );
+				ret.getJSONObject(host).getJSONObject("avgspeedMBps").put(""+key, mbps  );
 			}
 			
 			ret.getJSONObject(host).put("maxMBps", maxMBps);
@@ -312,7 +311,7 @@ public class StatisticHandler {
 		m_TraceRoutes.put(host, trace);
 	}
 	
-	public void addHostSpeed(String hostname, int time, double m_BytesLoaded)
+	public void addHostSpeed(String hostname, int time, long m_BytesLoaded)
 	{
 		// Check if hostname exists
 		Iterator<String> currenthosts = m_SpeedTests.keySet().iterator();
@@ -324,16 +323,16 @@ public class StatisticHandler {
 			
 			if(hostname.equals(host))
 			{
-				HashMap<Integer,Double> hostpings = m_SpeedTests.get(host);
+				HashMap<Integer,Long> hostspeeds = m_SpeedTests.get(host);
 				
-				hostpings.put(time, m_BytesLoaded);
+				hostspeeds.put(time, m_BytesLoaded);
 				found = true;
 			}
 		}
 		
 		if(!found)
 		{
-			HashMap<Integer,Double> hostpings = new HashMap<Integer,Double>();
+			HashMap<Integer,Long> hostpings = new HashMap<Integer,Long>();
 			
 			hostpings.put(time, m_BytesLoaded);
 			m_SpeedTests.put(hostname, hostpings);
