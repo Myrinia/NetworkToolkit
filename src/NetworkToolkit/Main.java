@@ -50,11 +50,9 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
 					VersionManagement vmgr = new VersionManagement();
 					
-					if(vmgr.isLatestVersion())
-					{
+					if(vmgr.isLatestVersion()) {
 						Main window = new Main();
 						window.MainFrame.setVisible(true);
 					}
@@ -107,7 +105,6 @@ public class Main {
 				m_ConfigPanel.setVisible(false);
 				m_StatusPanel.setVisible(true);
 				m_BackgroundTestHandler.startTest();
-
 			}
 		});
 		
@@ -181,11 +178,11 @@ public class Main {
 		DLTimeSlider.setMaximum(90);
 		DLTimeSlider.createStandardLabels(1);
 		DLTimeSlider.addChangeListener(new ChangeListener() {
-	      public void stateChanged(ChangeEvent e) {
-	          lblDLTime.setText(DLTimeSlider.getValue() + " Sek.");
-	          m_ConfigHandler.setConfigVariable("dltime", String.valueOf(DLTimeSlider.getValue()));
-	        }
-	      });
+			public void stateChanged(ChangeEvent e) {
+				lblDLTime.setText(DLTimeSlider.getValue() + " Sek.");
+				m_ConfigHandler.setConfigVariable("dltime", String.valueOf(DLTimeSlider.getValue()));
+			}
+		});
 		
 		DLTimeSlider.setValue(m_ConfigHandler.getInt("dltime"));
 		lblDLTime.setText(DLTimeSlider.getValue() + " Sek.");
@@ -195,17 +192,16 @@ public class Main {
 		DLTimeSlider.setBounds(140, 2, 150, 27);
 		DLTimeSlider.setBackground(new Color(255,255,255));
 		m_ConfigPanel.add(DLTimeSlider);
-		
+
 		JLabel lblDownloadTimePerFile = new JLabel("Max. Zeit Pro Download");
 		lblDownloadTimePerFile.setBounds(5, 0, 150, 25);
 		m_ConfigPanel.add(lblDownloadTimePerFile);
-		
+
 		PNLHosts = new JPanel();
 		PNLHosts.setBackground(new Color(210, 105, 30));
 		PNLHosts.setForeground(new Color(224, 255, 255));
 		PNLHosts.setBounds(5, 130, 450, 200);
 		m_ConfigPanel.add(PNLHosts);
-		
 
 		final JPanel pnlSetISPData = new JPanel();
 		pnlSetISPData.setBounds(300, 30, 250, 98);
@@ -258,11 +254,9 @@ public class Main {
 		int selectedindex = 0;
 		comboBoxConnectionType = new JComboBox<String>();
 		
-		for(String s : connectiontype)
-		{
+		for(String s : connectiontype) {
 			comboBoxConnectionType.addItem(s);
-			if(s.equals(m_ConfigHandler.getString("ISPConnectionType")))
-			{
+			if(s.equals(m_ConfigHandler.getString("ISPConnectionType"))) {
 				comboBoxConnectionType.setSelectedIndex(selectedindex);
 			}
 			selectedindex++;
@@ -339,7 +333,6 @@ public class Main {
 			}
 		});
 		m_ConfigPanel.add(pnlAddHost);
-		
 		LoadHostsIntoConfigPanel(PNLHosts);
 	}
 
@@ -355,19 +348,15 @@ public class Main {
 		
 		ArrayList<HostConfigDataSet> set = m_ConfigHandler.getHostList();
 		
-		for(HostConfigDataSet entry : set)
-		{
-			if(entry.getDoSpeedTest()) // Activated ?
-			{
+		for(HostConfigDataSet entry : set) {
+			if(entry.getDoSpeedTest()) { // Activated ?
 				activeSpeed+=1;
 			}
-			if(entry.getDoPingTest())
-			{
+			if(entry.getDoPingTest()) {
 				activePing+=1;
 			}
 			
-			if(entry.getDoTraceTest())
-			{
+			if(entry.getDoTraceTest()) {
 				activeTrace+= 1;
 			}
 			total +=1;
@@ -452,7 +441,6 @@ public class Main {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBounds(0, 0, 450, 200);
         
-		
 		PNLHosts.add(scrollPane);
 		
 		// Iterate through our map
@@ -461,7 +449,7 @@ public class Main {
 		
 		int margintop = 20;
 
-		for(final HostConfigDataSet entry : hostlist){
+		for(final HostConfigDataSet entry : hostlist) {
 			JLabel lblName = new JLabel();
 			JCheckBox boxSpeed = new JCheckBox();
 			JCheckBox boxPing = new JCheckBox();
@@ -485,8 +473,7 @@ public class Main {
 			boxSpeed.addItemListener(new ItemListener() {
 			    public void itemStateChanged(ItemEvent e) {
 			        boolean state = false;
-			        if(e.getStateChange() == 1)
-			        {
+			        if(e.getStateChange() == 1) {
 			        	state = true;
 			        }
 			        m_ConfigHandler.setHostState(entry.getHostName(),state, ConfigHandler.HOST_STATE_SPEED);
@@ -496,8 +483,7 @@ public class Main {
 			boxPing.addItemListener(new ItemListener() {
 			    public void itemStateChanged(ItemEvent e) {
 			        boolean state = false;
-			        if(e.getStateChange() == 1)
-			        {
+			        if(e.getStateChange() == 1) {
 			        	state = true;
 			        }
 			        m_ConfigHandler.setHostState(entry.getHostName(),state, ConfigHandler.HOST_STATE_PING);
@@ -507,8 +493,7 @@ public class Main {
 			boxTrace.addItemListener(new ItemListener() {
 			    public void itemStateChanged(ItemEvent e) {
 			        boolean state = false;
-			        if(e.getStateChange() == 1)
-			        {
+			        if(e.getStateChange() == 1) {
 			        	state = true;
 			        }
 			        m_ConfigHandler.setHostState(entry.getHostName(),state, ConfigHandler.HOST_STATE_TRACE);
@@ -529,7 +514,6 @@ public class Main {
 			
 			hostPanel.revalidate();
 			hostPanel.updateUI();
-
 		}
 		
 	}

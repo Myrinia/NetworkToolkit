@@ -24,8 +24,7 @@ public class ConfigHandler {
 	public static int HOST_STATE_TRACE = 3;
 	
 	
-	public ConfigHandler()
-	{
+	public ConfigHandler() {
 		CheckConfigDirExist();
 		m_ConfigVariables = new HashMap<String, String>();
 		m_ConfigHosts = new ArrayList<HostConfigDataSet>();
@@ -33,8 +32,7 @@ public class ConfigHandler {
 		loadConfig();
 	}
 	
-	public ArrayList<HostConfigDataSet> getHostList()
-	{
+	public ArrayList<HostConfigDataSet> getHostList() {
 		return m_ConfigHosts;
 	}
 	
@@ -49,8 +47,7 @@ public class ConfigHandler {
 			JSONObject hosts = new JSONObject();
 			JSONArray dataset = new JSONArray();
 			
-			for(HostConfigDataSet entry : m_ConfigHosts)
-			{
+			for(HostConfigDataSet entry : m_ConfigHosts) {
 				dataset = new JSONArray();
 				dataset.put(entry.getDownloadFile());
 				dataset.put(entry.getDoSpeedTest());
@@ -70,8 +67,7 @@ public class ConfigHandler {
 		}
 	}
 	
-	public void setISPData(String name, String Download, String Upload, String ConnectionType)
-	{
+	public void setISPData(String name, String Download, String Upload, String ConnectionType) {
 		setConfigVariable("ISPName",name);
 		setConfigVariable("ISPDown",Download);
 		setConfigVariable("ISPUp",Upload);
@@ -79,8 +75,7 @@ public class ConfigHandler {
 		
 	}
 	
-	private void loadConfig()
-	{
+	private void loadConfig() {
 		try {
 			String s = new String(Files.readAllBytes(Paths.get(m_ConfigFileName)));
 			JSONObject o = new JSONObject(s.trim());
@@ -93,8 +88,7 @@ public class ConfigHandler {
 			String HostKey;
 			while(keys.hasNext()) {
 			    key = keys.next();
-			    if(key.equals("hosts"))
-			    {
+			    if(key.equals("hosts")) {
 			    	hosts = o.getJSONObject("hosts");
 			    	Iterator<String> HostKeys = hosts.keys();
 			    	while(HostKeys.hasNext()) {
@@ -106,27 +100,22 @@ public class ConfigHandler {
 			    		set.setHostName(HostKey);
 			    		set.setFileToDownload(hostdata.getString(0));
 			    		
-			    		try
-			    		{
+			    		try {
 			    			set.setSpeedTest(hostdata.getBoolean(1));
 			    			set.setPingTest(hostdata.getBoolean(2));
 			    			set.setTraceTest(hostdata.getBoolean(3));
-			    		}catch(Exception e)
-			    		{
+			    		}catch(Exception e) {
 			    			
 			    		}
 			    		
 			    		System.out.println("Loading Config Host: " + HostKey + " : "+ hostdata);
-			    		
 			    		m_ConfigHosts.add(set);
 			    	}
-			    }else
-			    {
+			    }else {
 			    	System.out.println("Loading Config Variable: " + key + " : "+o.getString(key));
 			    	m_ConfigVariables.put(key, o.getString(key));
 			    }
 			}
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -141,17 +130,14 @@ public class ConfigHandler {
 	
 	public boolean getBoolean(String string)
 	{
-		if(m_ConfigVariables.containsKey(string))
-		{
+		if(m_ConfigVariables.containsKey(string)) {
 			return Boolean.valueOf(m_ConfigVariables.get(string));
 		}
 		return false;
 	}
 	
-	public String getString(String string)
-	{
-		if(m_ConfigVariables.containsKey(string))
-		{
+	public String getString(String string) {
+		if(m_ConfigVariables.containsKey(string)) {
 			return m_ConfigVariables.get(string);
 		}
 		return "";
@@ -159,15 +145,13 @@ public class ConfigHandler {
 	
 	public int getInt(String string)
 	{
-		if(m_ConfigVariables.containsKey(string))
-		{
+		if(m_ConfigVariables.containsKey(string)) {
 			return Integer.valueOf(m_ConfigVariables.get(string));
 		}
 		return 0;
 	}
 		
-	public void setConfigVariable(String key, boolean value)
-	{
+	public void setConfigVariable(String key, boolean value) {
 		setConfigVariable(key, String.valueOf(value));
 	}
 
@@ -175,8 +159,7 @@ public class ConfigHandler {
 		m_ConfigVariables.put(key, valueOf);
 	}
 	
-	public void addHost(String hostkey, String DLURL)
-	{
+	public void addHost(String hostkey, String DLURL) {
 		HostConfigDataSet s = new HostConfigDataSet();
 		s.setFileToDownload(DLURL);
 		s.setHostName(hostkey);
@@ -184,14 +167,10 @@ public class ConfigHandler {
 		m_ConfigHosts.add(s);
 	}
 	
-	public void setHostState(String hostkey, boolean state, int SpeedPingTrace) // SpeedPingTrace ==> 1=> Speed, 2=> Ping, 3=> Trace
-	{
-		for(HostConfigDataSet s : m_ConfigHosts)
-		{
-			if(s.getHostName().equals(hostkey))
-			{
-				switch(SpeedPingTrace)
-				{
+	public void setHostState(String hostkey, boolean state, int SpeedPingTrace) { // SpeedPingTrace ==> 1=> Speed, 2=> Ping, 3=> Trace
+		for(HostConfigDataSet s : m_ConfigHosts) {
+			if(s.getHostName().equals(hostkey)) {
+				switch(SpeedPingTrace) {
 					case 1:
 					{	s.setSpeedTest(state);
 						break;
@@ -214,14 +193,12 @@ public class ConfigHandler {
 		
 		ArrayList<HostConfigDataSet> newConfig = new ArrayList<HostConfigDataSet>();
 		
-		while(it.hasNext()){
+		while(it.hasNext()) {
 			HostConfigDataSet data = it.next();
-			if(data.getHostName().equals(hostName))
-			{
+			if(data.getHostName().equals(hostName)) {
 				it.remove();
 				System.out.println("Removing: " + data.getHostName() + " from HostList.");
-			}else
-			{
+			}else {
 				newConfig.add(data);
 			}
 		}

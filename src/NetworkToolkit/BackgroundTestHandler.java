@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.Timer;
 
-public class BackgroundTestHandler implements Runnable{
+public class BackgroundTestHandler implements Runnable {
 
 	private JLabel m_CurrentActionLabel;
 	private JLabel m_CurrentHostLabel;
@@ -23,8 +23,7 @@ public class BackgroundTestHandler implements Runnable{
 		startTest();
 	}
 	
-	public BackgroundTestHandler()
-	{
+	public BackgroundTestHandler() {
 		m_TestRunning = false;
 	}
 
@@ -63,41 +62,31 @@ public class BackgroundTestHandler implements Runnable{
 		
 		int totalteststodo = 0; 
 		// Get TotalTestsToDo 
-		for(HostConfigDataSet candidate : m_Candidates)
-		{
-			if(candidate.getDoSpeedTest())
-			{
+		for(HostConfigDataSet candidate : m_Candidates) {
+			if(candidate.getDoSpeedTest()) {
 				totalteststodo++;
 			}
-			if(candidate.getDoPingTest())
-			{
+			if(candidate.getDoPingTest()) {
 				totalteststodo++;
 			}
-			if(candidate.getDoTraceTest())
-			{
+			if(candidate.getDoTraceTest()) {
 				totalteststodo++;
 			}
 		}
 		
 		int currenttest = 0;
-		for(HostConfigDataSet candidate : m_Candidates)
-		{
-			
-			
-			if(candidate.getDoSpeedTest())
-			{
+		for(HostConfigDataSet candidate : m_Candidates) {
+			if(candidate.getDoSpeedTest()) {
 				setTotalBarStatus( totalteststodo,currenttest );
 				currenttest++;
 				DoSpeedTest(candidate);
 			}
-			if(candidate.getDoPingTest())
-			{
+			if(candidate.getDoPingTest()) {
 				setTotalBarStatus( totalteststodo,currenttest );
 				currenttest++;
 				DoPingTest(candidate);
 			}
-			if(candidate.getDoTraceTest())
-			{
+			if(candidate.getDoTraceTest()) {
 				setTotalBarStatus( totalteststodo,currenttest );
 				currenttest++;
 				DoTraceTest(candidate);
@@ -116,8 +105,9 @@ public class BackgroundTestHandler implements Runnable{
 	}
 
 	private void DoTraceTest(final HostConfigDataSet candidate) {
-		if(!m_TestRunning)
+		if(!m_TestRunning) {
 			return;
+		}
 		
 		setAction("TraceTest [ ! slow Test ! ]");
 		setHost(candidate.getHostName());
@@ -126,8 +116,7 @@ public class BackgroundTestHandler implements Runnable{
 		final TraceRoute t = new TraceRoute();
 		t.setHost(candidate.getDownloadFile());
 		
-		ActionListener refresher=new ActionListener()
-		{
+		ActionListener refresher=new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setInformation2(t.getLatestLine());
@@ -142,9 +131,10 @@ public class BackgroundTestHandler implements Runnable{
 	}
 
 	private void DoPingTest(final HostConfigDataSet candidate) {
-		if(!m_TestRunning)
+		if(!m_TestRunning) {
 			return;
-	
+		}
+
 		setAction("PingTest");
 		setHost(candidate.getHostName());
 		
@@ -153,8 +143,7 @@ public class BackgroundTestHandler implements Runnable{
 		
 		t.start();
 		
-		ActionListener refresher=new ActionListener()
-		{
+		ActionListener refresher=new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setInformation1("Ping: " + candidate.getHostName() + " for " + d.getLastPing() + " ms.");
@@ -180,7 +169,9 @@ public class BackgroundTestHandler implements Runnable{
 
 	private void DoSpeedTest(HostConfigDataSet candidate) {
 		if(!m_TestRunning)
+		{
 			return;
+		}
 		
 		setAction("SpeedTest");
 		setHost(candidate.getHostName());
@@ -189,8 +180,7 @@ public class BackgroundTestHandler implements Runnable{
 		Thread t = new Thread(d);
 		t.start();
 		
-		ActionListener refresher=new ActionListener()
-		{
+		ActionListener refresher=new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setProgressBarStatus((int)d.getDownloadProgress());
@@ -201,6 +191,7 @@ public class BackgroundTestHandler implements Runnable{
 
 		m_RefreshTimer = new Timer(10,refresher);
 		m_RefreshTimer.start();
+		
 		try {
 			t.join();
 			setProgressBarStatus(100);
@@ -208,19 +199,17 @@ public class BackgroundTestHandler implements Runnable{
 			e.printStackTrace();
 		}
 		m_RefreshTimer.stop();
-		
 	}
 
 	public void setCandidateList(final ArrayList<HostConfigDataSet> hostList) {
 		m_Candidates = hostList;
 	}
 		
-	private void setProgressBarStatus(int value)
-	{
+	private void setProgressBarStatus(int value) {
 		m_CurrentProgressBar.setValue(value);
 	}
-	private void setTotalBarStatus(int totalTests, int currenttest)
-	{
+	
+	private void setTotalBarStatus(int totalTests, int currenttest) {
 		if(totalTests == 0)
 			totalTests = 1;
 		
@@ -230,12 +219,11 @@ public class BackgroundTestHandler implements Runnable{
 		m_TotalProgressBar.setValue( 100 / totalTests * currenttest );
 	}
 	
-	private void setInformation1(String infos)
-	{
+	private void setInformation1(String infos) {
 		m_CurrentInformations1.setText(infos);
 	}
-	private void setInformation2(String infos)
-	{
+	
+	private void setInformation2(String infos) {
 		m_CurrentInformations2.setText(infos);
 	}
 	
@@ -243,19 +231,17 @@ public class BackgroundTestHandler implements Runnable{
 		m_CurrentInformations1 = Informations;
 	}
 
-	public void setInformationPanel2(JLabel m_CurrentInformations22) {
-		m_CurrentInformations2 = m_CurrentInformations22;
+	public void setInformationPanel2(JLabel informationlabel2) {
+		m_CurrentInformations2 = informationlabel2;
 	}
+	
 	public void stopTest() {
 		m_TestRunning = false;
 		BackgroundDownloadThread.m_TestRunning = false;
 	}
+	
 	public boolean isTestRunning()
 	{
 		return m_TestRunning;
 	}
-
-
-
-
 }

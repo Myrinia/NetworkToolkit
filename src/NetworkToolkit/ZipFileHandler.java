@@ -10,15 +10,12 @@ import java.util.zip.ZipFile;
 
 public class ZipFileHandler {
 	
-	public ZipFileHandler()
-	{
+	public ZipFileHandler() {
 		
 	}
 	
-	public void unzip(String fileZip,String newPath) 
-	{
-		try
-	    {
+	public void unzip(String fileZip,String newPath) {
+		try {
 	        int BUFFER = 2048;
 	        File file = new File(fileZip);
 
@@ -29,8 +26,7 @@ public class ZipFileHandler {
 	        Enumeration<?> zipFileEntries = zip.entries();
 
 	        // Process each entry
-	        while (zipFileEntries.hasMoreElements())
-	        {
+	        while (zipFileEntries.hasMoreElements()) {
 	            // grab a zip file entry
 	            ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
 	            String currentEntry = entry.getName();
@@ -42,18 +38,15 @@ public class ZipFileHandler {
 	            // create the parent directory structure if needed
 	            destinationParent.mkdirs();
 
-	            if (!entry.isDirectory())
-	            {
-	                BufferedInputStream is = new BufferedInputStream(zip
-	                .getInputStream(entry));
+	            if (!entry.isDirectory()) {
+	                BufferedInputStream is = new BufferedInputStream(zip.getInputStream(entry));
 	                int currentByte;
 	                // establish buffer for writing file
 	                byte data[] = new byte[BUFFER];
 
 	                // write the current file to disk
 	                FileOutputStream fos = new FileOutputStream(destFile);
-	                BufferedOutputStream dest = new BufferedOutputStream(fos,
-	                BUFFER);
+	                BufferedOutputStream dest = new BufferedOutputStream(fos, BUFFER);
 
 	                // read and write until last byte is encountered
 	                while ((currentByte = is.read(data, 0, BUFFER)) != -1) {
@@ -63,14 +56,9 @@ public class ZipFileHandler {
 	                dest.close();
 	                is.close();
 	            }
-
-
 	        }
-	    }
-	    catch (Exception e) 
-	    {
+	    } catch (Exception e) {
 	        System.out.println("ERROR: "+e.getMessage());
 	    }
 	}
-		
 }

@@ -7,8 +7,7 @@ public class HostConfigDataSet {
 	private boolean m_PingTest;
 	private boolean m_TraceTest;
 
-	public HostConfigDataSet()
-	{
+	public HostConfigDataSet() {
 		m_HostName = "";
 		m_FileToDownload = "";
 		m_SpeedTest = true;
@@ -16,8 +15,7 @@ public class HostConfigDataSet {
 		m_TraceTest = true;
 	}
 	
-	public HostConfigDataSet(String file, String name, boolean speed, boolean ping, boolean trace)
-	{
+	public HostConfigDataSet(String file, String name, boolean speed, boolean ping, boolean trace) {
 		m_HostName = name;
 		m_FileToDownload = file;
 		m_SpeedTest = speed;
@@ -25,49 +23,43 @@ public class HostConfigDataSet {
 		m_TraceTest = trace;
 	}
 	
-	void setFileToDownload(String s)
-	{
+	void setFileToDownload(String s) {
 		m_FileToDownload = s;
 	}
-	void setHostName(String s)
-	{
+	
+	void setHostName(String s) {
 		m_HostName = s;
 	}
-	void setSpeedTest(boolean b)
-	{
+	
+	void setSpeedTest(boolean b) {
 		m_SpeedTest = b;
 	}
-	void setPingTest(boolean b)
-	{
+	
+	void setPingTest(boolean b) {
 		m_PingTest = b;
 	}
-	void setTraceTest(boolean b)
-	{
+	
+	void setTraceTest(boolean b) {
 		m_TraceTest = b;
 	}
 	
-	String getHostName()
-	{
+	String getHostName() {
 		return m_HostName;
 	}
 	
-	String getDownloadFile()
-	{
+	String getDownloadFile() {
 		return m_FileToDownload;
 	}
 
-	boolean getDoSpeedTest()
-	{
+	boolean getDoSpeedTest() {
 		return m_SpeedTest;
 	}
 	
-	boolean getDoPingTest()
-	{
+	boolean getDoPingTest() {
 		return m_PingTest;
 	}
 	
-	boolean getDoTraceTest()
-	{
+	boolean getDoTraceTest() {
 		return m_TraceTest;
 	}
 	

@@ -23,17 +23,14 @@ public class VersionManagement {
 	
 	private final JFrame f = new JFrame();
 	
-	public VersionManagement()
-	{
+	public VersionManagement() {
 		
 	}
 	
-	public boolean isLatestVersion()
-	{
+	public boolean isLatestVersion() {
 		String latestVersion = getLatestVersionString();
 		
-		if( ! NETWORK_TOOLKIT_VERSION.equals(latestVersion))
-		{
+		if( ! NETWORK_TOOLKIT_VERSION.equals(latestVersion)) {
 			System.out.println("Diese Version ist nicht aktuell, bitte lade zuerst die aktuellste Version herunter");
 			System.out.println("Deine Version: " + NETWORK_TOOLKIT_VERSION);
 			System.out.println("Aktuellste Version: " + latestVersion);
@@ -120,11 +117,9 @@ public class VersionManagement {
 								System.out.println("Download Error");
 								e.printStackTrace();
 							}
-					
 				} catch (MalformedURLException e) {
 					System.out.println("Update failed!");
 				}
-				
 			};
 		};
 		
@@ -145,32 +140,22 @@ public class VersionManagement {
 		f.add(doAbortUpdate);
 		f.add(doUpdate);
 		f.add(lblWantToUpgrade);
-		
-		
-		
 	}
 
-	private String getLatestVersionString()
-	{
-	    try
-        {
+	private String getLatestVersionString() {
+	    try {
         	URL url = new URL("https://raw.githubusercontent.com/Myrinia/NetworkToolkit/master/version");
         
         	BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
         
             String line;
-
             StringBuilder sb = new StringBuilder();
 
-            while ((line = br.readLine()) != null)
-            {
+            while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
-
-            return sb.toString();
-            
-        }catch(Exception e)
-        {
+            return sb.toString(); 
+        }catch(Exception e) {
         	return NETWORK_TOOLKIT_VERSION;
         }
 	}

@@ -28,8 +28,7 @@ public class BackgroundDownloadThread implements Runnable {
 	private long m_BytesLoaded;
 	Timer m_CountdownTimer;
 	
-	public void run()
-	{
+	public void run() {
 		startDownload();
 	}
 	
@@ -41,9 +40,10 @@ public class BackgroundDownloadThread implements Runnable {
 			m_TestRunning = true;
 			m_CountdownTimer.start();
 			try (BufferedInputStream in = new BufferedInputStream(url.openStream());
-			  FileOutputStream fileOutputStream = new FileOutputStream("TestFile")) {
+				FileOutputStream fileOutputStream = new FileOutputStream("TestFile")) {
 			    byte dataBuffer[] = new byte[524288];
 			    int bytesRead;
+			    
 			    while (m_TestRunning && (bytesRead = in.read(dataBuffer, 0, 524288)) != -1) {
 			    	m_BytesLoaded += bytesRead;
 			    	Main.m_StatisticHandler.addHostSpeed(m_DownloadHostName, m_CurrentRunTime , m_BytesLoaded);
@@ -61,6 +61,7 @@ public class BackgroundDownloadThread implements Runnable {
 
 			m_CountdownTimer.stop();
 			deleteTestfile();
+			
 		} catch (MalformedURLException e1) {
 			m_CountdownTimer.stop();
 			m_TestRunning = false;
@@ -68,8 +69,7 @@ public class BackgroundDownloadThread implements Runnable {
 	}
 
 	private void deleteTestfile() {
-		try
-        { 
+		try { 
             if(Files.exists(Paths.get("TestFile")))
             {
             	Files.delete(Paths.get("TestFile"));
@@ -78,21 +78,14 @@ public class BackgroundDownloadThread implements Runnable {
             {
             	System.out.println("TestFile Does not exist!");
             }
-            
-        } 
-        catch(NoSuchFileException e) 
-        { 
+        } catch(NoSuchFileException e) { 
             System.out.println("No such file/directory exists"); 
-        } 
-        catch(DirectoryNotEmptyException e) 
-        { 
+        } catch(DirectoryNotEmptyException e) { 
             System.out.println("Directory is not empty."); 
-        } 
-        catch(IOException e) 
+        } catch(IOException e) 
         { 
             System.out.println("Invalid permissions."); 
-        } 
-		
+        }
 	}
 
 	private void setTargetFileSize(URL url) {
@@ -114,10 +107,12 @@ public class BackgroundDownloadThread implements Runnable {
 	{	
 		// Return the timer that is closer to the real time
 		double DL_PCT =  (m_BytesLoaded/m_TargetFileSize)*100 ;
-		double Timer_PCT = ((float)100) / (m_MaxRunTime*1000) * m_CurrentRunTime;
+		double Timer_PCT = (100.f / (m_MaxRunTime*1000)) * m_CurrentRunTime;
 
-		if( DL_PCT > Timer_PCT)
+		if( DL_PCT > Timer_PCT) {
 			return DL_PCT;
+		}
+		
 		return Timer_PCT;
 	}
 	
@@ -126,8 +121,7 @@ public class BackgroundDownloadThread implements Runnable {
 		
 	}
 	
-	public BackgroundDownloadThread(HostConfigDataSet set, int runtime)
-	{
+	public BackgroundDownloadThread(HostConfigDataSet set, int runtime) {
 		this.m_DownloadUrl = set.getDownloadFile();
 		this.m_DownloadHostName = set.getHostName();
 		this.m_MaxRunTime = runtime;
@@ -135,13 +129,11 @@ public class BackgroundDownloadThread implements Runnable {
 		m_TargetFileSize = 1;
 		m_TestRunning = false;
 		
-		ActionListener countDown=new ActionListener()
-		{
+		ActionListener countDown=new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				m_CurrentRunTime += 10;
-				if(m_CurrentRunTime == m_MaxRunTime*1000)
-				{
+				if(m_CurrentRunTime == m_MaxRunTime*1000) {
 					m_TestRunning  = false;
 					m_CountdownTimer.stop();
 				}
@@ -151,34 +143,31 @@ public class BackgroundDownloadThread implements Runnable {
 		m_CountdownTimer = new Timer(10,countDown);
 	}
 	
-	public String getBytesLoaded()
-	{
+	public String getBytesLoaded() {
 		return BitByteManager.humanReadableByteCountSI((long)m_BytesLoaded);
 	}
 	
-	public String getBytesLoadedBin()
-	{
+	public String getBytesLoadedBin() {
 		return BitByteManager.humanReadableByteCountBin((long)m_BytesLoaded);
 	}
 
-	public float getMBitperSecond()
-	{
+	public float getMBitperSecond() {
 		float seconds = m_CurrentRunTime/1000;
 		
 		return (float)Math.round((float) ((m_BytesLoaded*8/1024.f/1024.f)/seconds)*100) /100.f;
 		
 	}
 
-	public float getMBperSecond()
-	{
+	public float getMBperSecond() {
 		float seconds = m_CurrentRunTime/1000;
 		
 		return (float)Math.round((float) ((m_BytesLoaded/1000.f/1000.f)/seconds)*100.f) /100.f;
-		
 	}
+	
 	public String getTotalFileSize() {
 		return BitByteManager.humanReadableByteCountSI((long)m_TargetFileSize);
 	}
+	
 	public String getTotalFileSizeBin() {
 		return BitByteManager.humanReadableByteCountBin((long)m_TargetFileSize);
 	}

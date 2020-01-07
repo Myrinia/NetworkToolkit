@@ -18,8 +18,7 @@ public class TestHandler {
 	private BackgroundTestHandler m_BackgroundTestHandler;
 	private Thread m_BackgroundTestHandlerThread;
 
-	public TestHandler()
-	{
+	public TestHandler() {
 		m_GlobalTestStatusRunning = false;
 		m_BackgroundTestHandler = new BackgroundTestHandler();
 	}
@@ -88,12 +87,10 @@ public class TestHandler {
 		m_BackgroundTestHandler.setCurrentProgressBar(m_CurrentProgressBar);
 		m_BackgroundTestHandler.setInformationPanel(m_CurrentInformations);
 		m_BackgroundTestHandler.setInformationPanel2(m_CurrentInformations2);
-		
-		
 	}
+	
 	public void stopTest() {
-		if(m_GlobalTestStatusRunning)
-		{
+		if(m_GlobalTestStatusRunning) {
 			m_GlobalTestStatusRunning = false;
 			Main.btnAbortTest.setVisible(false);
 			Main.btnTestStarten.setVisible(true);
@@ -103,8 +100,7 @@ public class TestHandler {
 	}
 
 	public void startTest() {
-		if(!m_GlobalTestStatusRunning)
-		{
+		if(!m_GlobalTestStatusRunning) {
 			System.out.println("TestHandler.java - startTest");
 			m_GlobalTestStatusRunning = true;
 			Main.btnAbortTest.setVisible(true);

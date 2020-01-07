@@ -16,52 +16,39 @@ public class StatisticSaver {
 	
 	private String m_StatisticFolderName;
 	
-	public StatisticSaver()
-	{
+	public StatisticSaver() {
 		
 	}
 	
-	public void onTestStart()
-	{
+	public void onTestStart() {
 		String timeStamp = new SimpleDateFormat("yyyy.MM.dd_HH.mm.ss").format(new Date());
 		setFolderName(timeStamp);
 	}
 	
-	public void setFolderName(String name)
-	{
+	public void setFolderName(String name) {
 		m_StatisticFolderName = "data/statistics/"+name+"/";
 		CreateFolderIfNotExist(m_StatisticFolderName);
 	}
 	
-	private void CreateFolderIfNotExist(String foldername)
-	{
+	private void CreateFolderIfNotExist(String foldername) {
 		new File(foldername).mkdirs();
 	}
 	
-	private boolean writeFile(String filename,String content)
-	{
+	private boolean writeFile(String filename,String content) {
 		BufferedWriter writer = null;
-		try
-		{
+		try {
 		    writer = new BufferedWriter( new FileWriter( m_StatisticFolderName + filename ));
 		    writer.write( content );
 
 		}
-		catch ( Exception e)
-		{
+		catch ( Exception e) {
 			return false;
-		}
-		finally
-		{
-		    try
-		    {
-		        if ( writer != null)
-		        {
+		} finally {
+		    try {
+		        if ( writer != null) {
 		        	writer.close( );
 		        }
-		    }
-		    catch ( Exception e)
-		    {
+		    } catch ( Exception e) {
 		    	return false;
 		    }
 		}
@@ -73,24 +60,19 @@ public class StatisticSaver {
 		saveStatisticFile(filename,json.toString());
 	}
 	
-	public void saveStatisticFile(String filename, String content)
-	{
-		if(writeFile(filename,content))
-		{
+	public void saveStatisticFile(String filename, String content) {
+		if(writeFile(filename,content)) {
 			System.out.println("Statistic File: " + filename + " saved!");
-		}else
-		{
+		}else {
 			System.out.println("Error saving Statistic " + filename + " !");
 		}
 	}
 
-	public void savePerHostSpeedTests(JSONObject speedTests)
-	{
+	public void savePerHostSpeedTests(JSONObject speedTests) {
 		
 		Iterator<String> SpeedItr = speedTests.keys();
 		
-		while(SpeedItr.hasNext())
-		{
+		while(SpeedItr.hasNext()) {
 			String key = SpeedItr.next();
 			String folderkey = removeToxicChars(key);
 			String folder = m_StatisticFolderName+folderkey;
@@ -104,8 +86,7 @@ public class StatisticSaver {
 	{
 		Iterator<String> PingItr = pingTests.keys();
 		
-		while(PingItr.hasNext())
-		{
+		while(PingItr.hasNext()) {
 			String key = PingItr.next();
 			String folderkey = removeToxicChars(key);
 			
@@ -121,8 +102,7 @@ public class StatisticSaver {
 		
 		Iterator<String> TraceItr = traceTests.keys();
 		
-		while(TraceItr.hasNext())
-		{
+		while(TraceItr.hasNext()) {
 			String key = TraceItr.next();
 			String folderkey = removeToxicChars(key);
 			
@@ -147,23 +127,20 @@ public class StatisticSaver {
 		return BBCoded.toString();
 	}
 	
-	private String toRawStringTraceData(JSONArray traceData)
-	{
+	private String toRawStringTraceData(JSONArray traceData) {
 		StringBuilder RawString = new StringBuilder();
 		
 		
 		int keys = traceData.length();
 		
-		for(int i = 0; i < keys; i ++)
-		{
+		for(int i = 0; i < keys; i ++) {
 			RawString.append(traceData.get(i)+"\n");
 		}
 		
 		return RawString.toString();
 	}
 	
-	private String removeToxicChars(String name)
-	{
+	private String removeToxicChars(String name) {
 		name = name.replace("http://", "");
 		name = name.replace("https://", "");
 		name = name.replace("/", "_");
@@ -197,8 +174,7 @@ public class StatisticSaver {
 			BBCoded.append("[code]");
 			BBCoded.append("\n");
 			
-			for(int i = 1; i < jsonObject.length()-3; i++)
-			{
+			for(int i = 1; i < jsonObject.length()-3; i++) {
 				Float data = jsonObject.getFloat(""+i);
 				
 				BBCoded.append(String.format("#%02d" , i)+" : " + data + " ms");
@@ -209,8 +185,6 @@ public class StatisticSaver {
 			BBCoded.append("[/spoiler]\n");
 			
 			return BBCoded.toString();
-			
-	
 	}
 
 	private String toRawStringPingData(JSONObject jsonObject) {
@@ -226,8 +200,7 @@ public class StatisticSaver {
 		sb.append("Jitter:" + jsonObject.getFloat("jitterms"));
 		sb.append("\n");
 		
-		for(int i = 1; i < jsonObject.length()-3; i++)
-		{
+		for(int i = 1; i < jsonObject.length()-3; i++) {
 			Float data = jsonObject.getFloat(""+i);
 			
 			sb.append(String.format("#%03d" , i)+" : " + data + " ms");
@@ -235,7 +208,6 @@ public class StatisticSaver {
 		}
 		
 		return sb.toString();
-		
 	}
 
 	private String toRawStringSpeedData(JSONObject jsonObject) {
@@ -255,8 +227,7 @@ public class StatisticSaver {
 		Iterator<String> itr = jsonObject.keySet().iterator();
 		HashMap<Integer,Float> Bits = new HashMap<Integer,Float>();
 		
-		while(itr.hasNext())
-		{
+		while(itr.hasNext()) {
 			String key = itr.next();
 			
 			if (
@@ -264,8 +235,7 @@ public class StatisticSaver {
 					key.equals("averageMBitps") ||
 					key.equals("averageMBps") ||
 					key.equals("maxMBitps")
-				)
-			{
+				) {
 				continue;
 			}
 			
@@ -276,12 +246,12 @@ public class StatisticSaver {
 		
 		Iterator<Integer> bititr = Bits.keySet().iterator();
 		
-		while(bititr.hasNext())
-		{
+		while(bititr.hasNext()) {
 			int key = bititr.next();
 			float value = Bits.get(key);
-			if(key == 0)
+			if(key == 0) {
 				key = 1;
+			}
 			
 			String MB = BitByteManager.humanReadableByteCountBin(  (long)value,true);
 			String mbit = BitByteManager.humanReadableBitCountBin( (long)value,true);
@@ -298,7 +268,6 @@ public class StatisticSaver {
 			sb.append("]");
 			sb.append("\n");
 		}
-		
 		return sb.toString();
 	}
 }

@@ -21,14 +21,12 @@ public class BackgroundPingThread implements Runnable {
 		start();
 	}
 	
-	public BackgroundPingThread(HostConfigDataSet candidate)
-	{
+	public BackgroundPingThread(HostConfigDataSet candidate) {
 		m_URL = candidate.getDownloadFile();
 		m_PingTimes = new ArrayList<Long>();	
 	}
 	
-	public void start()
-	{
+	public void start() {
 		m_LastPing 	  = 0;
 		m_FastestPing = 10000;
 		m_SlowestPing = 0;
@@ -45,8 +43,7 @@ public class BackgroundPingThread implements Runnable {
 			
 			long start = 0;
 			
-			for(int i = 0; i < 50; i++)
-			{
+			for(int i = 0; i < 50; i++) {
 				s = new Socket();
 				start = System.currentTimeMillis();
 				
@@ -72,33 +69,27 @@ public class BackgroundPingThread implements Runnable {
 		}		
 	}
 	
-	public long getFastestPing()
-	{
+	public long getFastestPing() {
 		return m_FastestPing;
 	}
 	
-	public long getSlowestPing()
-	{
+	public long getSlowestPing() {
 		return m_SlowestPing;
 	}
 	
-	public long getLastPing()
-	{
+	public long getLastPing() {
 		return m_LastPing;
 	}
 	
-	public ArrayList<Long> getPingTimes()
-	{
+	public ArrayList<Long> getPingTimes() {
 		return m_PingTimes;
 	}
 	
-	public int getCurrentPingID()
-	{
+	public int getCurrentPingID() {
 		return m_CurrentPingID;
 	}
 	
-	public int getCurrentPingTestStatus() // For Progressbar
-	{
+	public int getCurrentPingTestStatus() { // For Progressbar
 		return  100 / 50 * m_CurrentPingID;
 	}
 }
