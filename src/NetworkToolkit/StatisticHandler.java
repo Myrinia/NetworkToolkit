@@ -349,41 +349,41 @@ public class StatisticHandler {
 				float avgMBps = hostdata.getFloat("averageMBps");
 				float avgMBitps = hostdata.getFloat("averageMBitps");
 				
-				BBCode.append("[TR]");
-				BBCode.append("[TD]");
-				BBCode.append("Max. MBit/s");
-				BBCode.append("[/TD]");
-				BBCode.append("[TD]");
+				BBCode.append("[TR]\n");
+				BBCode.append("[TD]\n");
+				BBCode.append("Max. MBit/s\n");
+				BBCode.append("[/TD]\n");
+				BBCode.append("[TD]\n");
 				BBCode.append(maxMBitps);
-				BBCode.append("[/TD]");
-				BBCode.append("[/TR]");
+				BBCode.append("\n[/TD]\n");
+				BBCode.append("[/TR]\n");
 				
-				BBCode.append("[TR]");
-				BBCode.append("[TD]");
-				BBCode.append("Max. MB/s");
-				BBCode.append("[/TD]");
-				BBCode.append("[TD]");
+				BBCode.append("[TR]\n");
+				BBCode.append("[TD]\n");
+				BBCode.append("Max. MB/s\n");
+				BBCode.append("[/TD]\n");
+				BBCode.append("[TD]\n");
 				BBCode.append(maxMBps);
-				BBCode.append("[/TD]");
-				BBCode.append("[/TR]");
+				BBCode.append("\n[/TD]\n");
+				BBCode.append("[/TR]\n");
 				
-				BBCode.append("[TR]");
-				BBCode.append("[TD]");
-				BBCode.append("Avg. MBit/s");
-				BBCode.append("[/TD]");
-				BBCode.append("[TD]");
+				BBCode.append("[TR]\n");
+				BBCode.append("[TD]\n");
+				BBCode.append("Avg. MBit/s\n");
+				BBCode.append("[/TD]\n");
+				BBCode.append("[TD]\n");
 				BBCode.append(avgMBitps);
-				BBCode.append("[/TD]");
-				BBCode.append("[/TR]");
+				BBCode.append("[/TD]\n");
+				BBCode.append("\n[/TR]\n");
 				
-				BBCode.append("[TR]");
-				BBCode.append("[TD]");
-				BBCode.append("Avg. MB/s");
-				BBCode.append("[/TD]");
-				BBCode.append("[TD]");
+				BBCode.append("[TR]\n");
+				BBCode.append("[TD]\n");
+				BBCode.append("Avg. MB/s\n");
+				BBCode.append("[/TD]\n");
+				BBCode.append("[TD]\n");
 				BBCode.append(avgMBps);
-				BBCode.append("[/TD]");
-				BBCode.append("[/TR]");
+				BBCode.append("\n[/TD]\n");
+				BBCode.append("[/TR]\n");
 			}
 			// End Speedtest Data
 			
@@ -398,45 +398,45 @@ public class StatisticHandler {
 				float avgping = hostdata.getFloat("avgpingms");
 				float jitter = hostdata.getFloat("jitterms");
 				
-				BBCode.append("[TR]");
-				BBCode.append("[TD]");
-				BBCode.append("Min:");
-				BBCode.append("[/TD]");
-				BBCode.append("[TD]");
+				BBCode.append("[TR]\n");
+				BBCode.append("[TD]\n");
+				BBCode.append("Min:\n");
+				BBCode.append("[/TD]\n");
+				BBCode.append("[TD]\n");
 				BBCode.append(minping);
-				BBCode.append("ms");
-				BBCode.append("[/TD]");
-				BBCode.append("[/TR]");
+				BBCode.append("ms\n");
+				BBCode.append("[/TD]\n");
+				BBCode.append("[/TR]\n");
 				
-				BBCode.append("[TR]");
-				BBCode.append("[TD]");
-				BBCode.append("Max:");
-				BBCode.append("[/TD]");
-				BBCode.append("[TD]");
+				BBCode.append("[TR]\n");
+				BBCode.append("[TD]\n");
+				BBCode.append("Max:\n");
+				BBCode.append("[/TD]\n");
+				BBCode.append("[TD]\n");
 				BBCode.append(maxping);
-				BBCode.append("ms");
-				BBCode.append("[/TD]");
-				BBCode.append("[/TR]");
+				BBCode.append("ms\n");
+				BBCode.append("[/TD]\n");
+				BBCode.append("[/TR]\n");
 				
-				BBCode.append("[TR]");
-				BBCode.append("[TD]");
-				BBCode.append("Avg.");
-				BBCode.append("[/TD]");
-				BBCode.append("[TD]");
+				BBCode.append("[TR]\n");
+				BBCode.append("[TD]\n");
+				BBCode.append("Avg.\n");
+				BBCode.append("[/TD]\n");
+				BBCode.append("[TD]\n");
 				BBCode.append(avgping);
-				BBCode.append("ms");
-				BBCode.append("[/TD]");
-				BBCode.append("[/TR]");
+				BBCode.append("ms\n");
+				BBCode.append("[/TD]\n");
+				BBCode.append("[/TR]\n");
 				
-				BBCode.append("[TR]");
-				BBCode.append("[TD]");
-				BBCode.append("Jitter:");
-				BBCode.append("[/TD]");
-				BBCode.append("[TD]");
+				BBCode.append("[TR]\n");
+				BBCode.append("[TD]\n");
+				BBCode.append("Jitter:\n");
+				BBCode.append("[/TD]\n");
+				BBCode.append("[TD]\n");
 				BBCode.append(jitter);
-				BBCode.append("ms");
-				BBCode.append("[/TD]");
-				BBCode.append("[/TR]");
+				BBCode.append("ms\n");
+				BBCode.append("[/TD]\n");
+				BBCode.append("[/TR]\n");
 				
 			}
 			// End Ping Test
@@ -445,14 +445,14 @@ public class StatisticHandler {
 			JSONArray tracedata = hostdata.getJSONArray("trace");
 			if(tracedata.length() > 0 )
 			{
-				BBCode.append("[TR]");
-				BBCode.append("[TD]");
-				BBCode.append("Traceroute");
-				BBCode.append("[/TD]");
-				BBCode.append("[TD]");
+				BBCode.append("[TR]\n");
+				BBCode.append("[TD]\n");
+				BBCode.append("Traceroute\n");
+				BBCode.append("[/TD]\n");
+				BBCode.append("[TD]\n");
 				BBCode.append(m_StatisticSaver.generateBBCodeForumTraceTest(host, tracedata));
-				BBCode.append("[/TD]");
-				BBCode.append("[/TR]");
+				BBCode.append("\n[/TD]\n");
+				BBCode.append("[/TR]\n");
 			}
 			// End TraceTest Data
 			
