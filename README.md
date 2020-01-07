@@ -15,7 +15,7 @@ So the idea was born to create this Toolkit, to allow for everyone to test the i
 * [SpeedTest-VS-RealeDownloadRate](https://www.lteforum.at/mobilfunk/speedtest-vs-reale-downloadrate.12998/) - LTEForum.at
 * [Peerings und Upstreams im Gegensatz zu Speedtests](https://www.lteforum.at/mobilfunk/peering-und-upstreams-im-gegensatz-zu-speedtests-das-wahre-qualitaetskriterium.13891/) - LTEForum.at
 * [NetFlix Bandbreite](https://www.lteforum.at/mobilfunk/netflix-bandbreite.13954/) - Bandbreiten Probleme zu NetFlix
-
+* [UPC/Magenta Fusionierung](https://www.lteforum.at/mobilfunk/langsames-internet-nach-magenta-fusionierung.12567/) - Magenta wird immer langsamer nach UPC übernahme
 
 ## Disclaimer:
 
