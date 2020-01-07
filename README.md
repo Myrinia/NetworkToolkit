@@ -12,11 +12,10 @@ You can download the source and compile the project on your own or simply downlo
 As of me upgrading my Internet Connection and not reaching the full Bandwith on specific hosts, i wanted to dig deeper and found out that it's not only me not reaching the booked speed.
 So the idea was born to create this Toolkit, to allow for everyone to test the internet bandwith on real test data, instead of Speedtests.
 
-```
 * [SpeedTest-VS-RealeDownloadRate](https://www.lteforum.at/mobilfunk/speedtest-vs-reale-downloadrate.12998/) - LTEForum.at
 * [Peerings und Upstreams im Gegensatz zu Speedtests](https://www.lteforum.at/mobilfunk/peering-und-upstreams-im-gegensatz-zu-speedtests-das-wahre-qualitaetskriterium.13891/) - LTEForum.at
 * [NetFlix Bandbreite](https://www.lteforum.at/mobilfunk/netflix-bandbreite.13954/) - Bandbreiten Probleme zu NetFlix
-```
+
 
 ## Disclaimer:
 
