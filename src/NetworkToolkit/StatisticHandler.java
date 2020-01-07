@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class StatisticHandler {
@@ -43,6 +44,8 @@ public class StatisticHandler {
 		m_StatisticSaver.savePerHostTraceTests(TraceTests);
 		
 		m_StatisticSaver.saveStatisticFile("AllTests.json", getAllTestStatisticsAsJSON());
+		m_StatisticSaver.saveStatisticFile("Forum_BBCode_AllUsefulData.txt", getAllTestStatisticsAsForumVersion());
+		
 	}
 	
 	public HashMap<String,HashMap<Integer,Long>> getSpeedTestStatistic() {
@@ -319,5 +322,144 @@ public class StatisticHandler {
 			hostpings.put(time, m_BytesLoaded);
 			m_SpeedTests.put(hostname, hostpings);
 		}
+	}
+	
+
+	private String getAllTestStatisticsAsForumVersion() {
+		StringBuilder BBCode = new StringBuilder();
+		BBCode.append(" Testergebnis für: " + m_StatisticSaver.getStatisticFolderName());
+		BBCode.append("\n");
+		
+		JSONObject all = getAllTestStatisticsAsJSON();
+		
+		Iterator<String> hosts = all.keySet().iterator();
+		
+		while(hosts.hasNext()){
+			String host = hosts.next();
+			JSONObject hostdata = all.getJSONObject(host);
+
+			int SpeedtestsCount = hostdata.getJSONObject("avgspeedMBps").length();
+			BBCode.append(host);
+			BBCode.append("[TABLE]\n");
+			// Start Speedtest Data
+			if(SpeedtestsCount > 0) { // Has SpeedTest Data
+				float maxMBps = hostdata.getFloat("maxMBps");
+				float maxMBitps = hostdata.getFloat("maxMBitps");
+				
+				float avgMBps = hostdata.getFloat("averageMBps");
+				float avgMBitps = hostdata.getFloat("averageMBitps");
+				
+				BBCode.append("[TR]");
+				BBCode.append("[TD]");
+				BBCode.append("Max. MBit/s");
+				BBCode.append("[/TD]");
+				BBCode.append("[TD]");
+				BBCode.append(maxMBitps);
+				BBCode.append("[/TD]");
+				BBCode.append("[/TR]");
+				
+				BBCode.append("[TR]");
+				BBCode.append("[TD]");
+				BBCode.append("Max. MB/s");
+				BBCode.append("[/TD]");
+				BBCode.append("[TD]");
+				BBCode.append(maxMBps);
+				BBCode.append("[/TD]");
+				BBCode.append("[/TR]");
+				
+				BBCode.append("[TR]");
+				BBCode.append("[TD]");
+				BBCode.append("Avg. MBit/s");
+				BBCode.append("[/TD]");
+				BBCode.append("[TD]");
+				BBCode.append(avgMBitps);
+				BBCode.append("[/TD]");
+				BBCode.append("[/TR]");
+				
+				BBCode.append("[TR]");
+				BBCode.append("[TD]");
+				BBCode.append("Avg. MB/s");
+				BBCode.append("[/TD]");
+				BBCode.append("[TD]");
+				BBCode.append(avgMBps);
+				BBCode.append("[/TD]");
+				BBCode.append("[/TR]");
+			}
+			// End Speedtest Data
+			
+			// Start Ping Test
+			
+			JSONObject pingdata = hostdata.getJSONObject("ping");
+			
+			if(pingdata.length() > 0 ) // We have Ping Data
+			{
+				float maxping = hostdata.getFloat("maxpingms");
+				float minping = hostdata.getFloat("minpingms");
+				float avgping = hostdata.getFloat("avgpingms");
+				float jitter = hostdata.getFloat("jitterms");
+				
+				BBCode.append("[TR]");
+				BBCode.append("[TD]");
+				BBCode.append("Min:");
+				BBCode.append("[/TD]");
+				BBCode.append("[TD]");
+				BBCode.append(minping);
+				BBCode.append("ms");
+				BBCode.append("[/TD]");
+				BBCode.append("[/TR]");
+				
+				BBCode.append("[TR]");
+				BBCode.append("[TD]");
+				BBCode.append("Max:");
+				BBCode.append("[/TD]");
+				BBCode.append("[TD]");
+				BBCode.append(maxping);
+				BBCode.append("ms");
+				BBCode.append("[/TD]");
+				BBCode.append("[/TR]");
+				
+				BBCode.append("[TR]");
+				BBCode.append("[TD]");
+				BBCode.append("Avg.");
+				BBCode.append("[/TD]");
+				BBCode.append("[TD]");
+				BBCode.append(avgping);
+				BBCode.append("ms");
+				BBCode.append("[/TD]");
+				BBCode.append("[/TR]");
+				
+				BBCode.append("[TR]");
+				BBCode.append("[TD]");
+				BBCode.append("Jitter:");
+				BBCode.append("[/TD]");
+				BBCode.append("[TD]");
+				BBCode.append(jitter);
+				BBCode.append("ms");
+				BBCode.append("[/TD]");
+				BBCode.append("[/TR]");
+				
+			}
+			// End Ping Test
+			
+			// Start TraceTest Data
+			JSONArray tracedata = hostdata.getJSONArray("trace");
+			if(tracedata.length() > 0 )
+			{
+				BBCode.append("[TR]");
+				BBCode.append("[TD]");
+				BBCode.append("Traceroute");
+				BBCode.append("[/TD]");
+				BBCode.append("[TD]");
+				BBCode.append(m_StatisticSaver.generateBBCodeForumTraceTest(host, tracedata));
+				BBCode.append("[/TD]");
+				BBCode.append("[/TR]");
+			}
+			// End TraceTest Data
+			
+			BBCode.append("[/TABLE]\n");
+			
+		}
+		
+		return BBCode.toString();
 	}
 }

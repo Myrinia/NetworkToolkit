@@ -20,6 +20,11 @@ public class StatisticSaver {
 		
 	}
 	
+	public String getStatisticFolderName()
+	{
+		return m_StatisticFolderName;
+	}
+	
 	public void onTestStart() {
 		String timeStamp = new SimpleDateFormat("yyyy.MM.dd_HH.mm.ss").format(new Date());
 		setFolderName(timeStamp);
@@ -114,14 +119,14 @@ public class StatisticSaver {
 		}
 	}
 	
-	private String generateBBCodeForumTraceTest(String key, JSONArray traceData) {
+	public String generateBBCodeForumTraceTest(String key, JSONArray traceData) {
 		
 		StringBuilder BBCoded = new StringBuilder();
-		BBCoded.append("[spoiler=Trace: "+key+"]\n[code]\n");
+		BBCoded.append("[spoiler=Trace: "+key+"]\n[php]\n");
 		
 		BBCoded.append(toRawStringTraceData(traceData));
 		
-		BBCoded.append("[/code]\n");
+		BBCoded.append("[/php]\n");
 		BBCoded.append("[/spoiler]\n");
 		
 		return BBCoded.toString();
@@ -162,7 +167,7 @@ public class StatisticSaver {
 			BBCoded.append(key + " ");
 			BBCoded.append("Min: ");
 			BBCoded.append(min);
-			BBCoded.append("ms Max: ");
+			BBCoded.append(" ms Max: ");
 			BBCoded.append(max);
 			BBCoded.append("ms Avg: ");
 			BBCoded.append(avg);
@@ -191,14 +196,14 @@ public class StatisticSaver {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("Max:" + jsonObject.getFloat("maxpingms"));
-		sb.append("\n");
-		sb.append("Min:" + jsonObject.getFloat("minpingms"));
-		sb.append("\n");
-		sb.append("Durchschnitt:" + jsonObject.getFloat("avgpingms"));
-		sb.append("\n");
-		sb.append("Jitter:" + jsonObject.getFloat("jitterms"));
-		sb.append("\n");
+		sb.append("Max: " + jsonObject.getFloat("maxpingms"));
+		sb.append("ms\n");
+		sb.append("Min: " + jsonObject.getFloat("minpingms"));
+		sb.append("ms\n");
+		sb.append("Durchschnitt: " + jsonObject.getFloat("avgpingms"));
+		sb.append("ms\n");
+		sb.append("Jitter: " + jsonObject.getFloat("jitterms"));
+		sb.append("ms\n");
 		
 		for(int i = 1; i < jsonObject.length()-3; i++) {
 			Float data = jsonObject.getFloat(""+i);

@@ -53,7 +53,7 @@ public class TraceRoute
 	    try {
 	    	Process traceRt;
 	        if(m_OperatingSystem.contains("win"))  {
-	        	traceRt = Runtime.getRuntime().exec("tracert -w 30 " + m_Host);
+	        	traceRt = Runtime.getRuntime().exec("tracert " + m_Host);
 	        }else {
 	        	traceRt = Runtime.getRuntime().exec("traceroute " + m_Host);
         	}
