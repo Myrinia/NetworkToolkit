@@ -1,9 +1,11 @@
 package NetworkToolkit;
 
+import java.math.BigDecimal;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class BackgroundPingThread implements Runnable {
@@ -50,6 +52,11 @@ public class BackgroundPingThread implements Runnable {
 			    s.connect(a, timeoutMillis);
 			    long stop = System.nanoTime();
 				float timerequired = (stop - start)/1000f/1000f;
+
+				BigDecimal bd = new BigDecimal(Float.toString(timerequired));
+			    bd = bd.setScale(3, BigDecimal.ROUND_HALF_UP);
+			    timerequired = bd.floatValue();
+
 				m_LastPing = timerequired;
 				
 				if(m_FastestPing > timerequired) {
