@@ -24,7 +24,7 @@ public class BitByteManager {
 	}
 	
 	public static String humanReadableBitCountSI(long bytes, boolean asInPerSecond) {
-		bytes *= 8;
+		bytes /= 8;
 		if(asInPerSecond) {
 			return humanReadableByteCountSI(bytes) + "/s";
 		}else {
@@ -57,7 +57,7 @@ public class BitByteManager {
 	}
 	
 	public static String humanReadableBitCountBin(long bytes, boolean asInPerSecond) {
-		bytes *= 8;
+		bytes /= 8;
 		if(asInPerSecond) {
 			return humanReadableByteCountSI(bytes) + "/s";
 		}else {

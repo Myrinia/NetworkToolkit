@@ -221,7 +221,7 @@ public class StatisticSaver {
 		sb.append("\n");
 		sb.append("MaxMbit:" + jsonObject.getFloat("maxMBitps"));
 		sb.append("\n");
-		sb.append("AverageMBit/s:" + jsonObject.getFloat("maxMBitps"));
+		sb.append("AverageMBit/s:" + jsonObject.getFloat("averageMBps"));
 		sb.append("\n");
 		
 		Iterator<String> itr = jsonObject.keySet().iterator();

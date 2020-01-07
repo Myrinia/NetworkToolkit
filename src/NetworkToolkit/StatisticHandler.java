@@ -120,7 +120,7 @@ public class StatisticHandler {
 			int elements = 1;
 			float minping = 10000.f;
 			float maxping = 0.f;
-			int avgping = 0;
+			float avgping = 0;
 			for(float f : m_PingTests.get(host)) {
 				obj.put(""+elements,f);
 				elements++;
@@ -170,7 +170,7 @@ public class StatisticHandler {
 			String host = itrping.next();
 			float minPing = 10000.f;
 			float maxPing = 0.f;
-			float avgPing = 0;
+			float avgPing = 0.f;
 			
 			if( !ret.has(host)) {
 				JSONObject tmpar = new JSONObject();
