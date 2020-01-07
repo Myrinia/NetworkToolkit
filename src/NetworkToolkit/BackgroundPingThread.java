@@ -9,11 +9,11 @@ import java.util.ArrayList;
 public class BackgroundPingThread implements Runnable {
 
 	private String m_URL;
-	private ArrayList<Long> m_PingTimes;
+	private ArrayList<Float> m_PingTimes;
 	
-	private long m_LastPing;
-	private long m_FastestPing;
-	private long m_SlowestPing;
+	private float m_LastPing;
+	private float m_FastestPing;
+	private float m_SlowestPing;
 	private int m_CurrentPingID;
 	
 	@Override
@@ -23,7 +23,7 @@ public class BackgroundPingThread implements Runnable {
 	
 	public BackgroundPingThread(HostConfigDataSet candidate) {
 		m_URL = candidate.getDownloadFile();
-		m_PingTimes = new ArrayList<Long>();	
+		m_PingTimes = new ArrayList<Float>();	
 	}
 	
 	public void start() {
@@ -45,18 +45,20 @@ public class BackgroundPingThread implements Runnable {
 			
 			for(int i = 0; i < 50; i++) {
 				s = new Socket();
-				start = System.currentTimeMillis();
+				start = System.nanoTime();
 				
 			    s.connect(a, timeoutMillis);
-			    long stop = System.currentTimeMillis();
-				long timerequired = (stop - start);
+			    long stop = System.nanoTime();
+				float timerequired = (stop - start)/1000f/1000f;
 				m_LastPing = timerequired;
 				
-				if(m_FastestPing > timerequired)
+				if(m_FastestPing > timerequired) {
 					m_FastestPing = timerequired;
+				}
 				
-				if(m_SlowestPing < timerequired)
+				if(m_SlowestPing < timerequired) {
 					m_SlowestPing = timerequired;
+				}
 				
 				m_CurrentPingID++;
 				
@@ -69,19 +71,19 @@ public class BackgroundPingThread implements Runnable {
 		}		
 	}
 	
-	public long getFastestPing() {
+	public float getFastestPing() {
 		return m_FastestPing;
 	}
 	
-	public long getSlowestPing() {
+	public float getSlowestPing() {
 		return m_SlowestPing;
 	}
 	
-	public long getLastPing() {
+	public float getLastPing() {
 		return m_LastPing;
 	}
 	
-	public ArrayList<Long> getPingTimes() {
+	public ArrayList<Float> getPingTimes() {
 		return m_PingTimes;
 	}
 	

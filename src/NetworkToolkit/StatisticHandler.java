@@ -9,7 +9,7 @@ import org.json.JSONObject;
 public class StatisticHandler {
 
 	private HashMap<String,HashMap<Integer,Long>> m_SpeedTests;		// HashMap<HostName,HashMap<passedTime,bytesloaded>>
-	private HashMap<String,ArrayList<Long>> m_PingTests; 			// HashMap<HostName,ArrayList<milliseconds>>
+	private HashMap<String,ArrayList<Float>> m_PingTests; 			// HashMap<HostName,ArrayList<milliseconds>>
 	private HashMap<String,ArrayList<String>> m_TraceRoutes;        // HashMap<Host,Traceroute>
 	private StatisticSaver m_StatisticSaver;
 	
@@ -20,7 +20,7 @@ public class StatisticHandler {
 	
 	public void reset() {
 		m_SpeedTests = new HashMap<String,HashMap<Integer,Long>>();
-		m_PingTests  = new HashMap<String,ArrayList<Long>>();
+		m_PingTests  = new HashMap<String,ArrayList<Float>>();
 		m_TraceRoutes = new HashMap<String,ArrayList<String>>();
 	}
 	
@@ -121,18 +121,18 @@ public class StatisticHandler {
 			float minping = 10000.f;
 			float maxping = 0.f;
 			int avgping = 0;
-			for(long l : m_PingTests.get(host)) {
-				obj.put(""+elements,l);
+			for(float f : m_PingTests.get(host)) {
+				obj.put(""+elements,f);
 				elements++;
 				
-				avgping += l;
+				avgping += f;
 				
-				if(minping > l) {
-					minping = l;
+				if(minping > f) {
+					minping = f;
 				}
 				
-				if(maxping < l) {
-					maxping = l;
+				if(maxping < f) {
+					maxping = f;
 				}
 			}
 			
@@ -184,19 +184,19 @@ public class StatisticHandler {
 			
 			int pingscaptures = m_PingTests.get(host).size();
 			for(int i = 0; i < pingscaptures; i++ ) {
-				long l = m_PingTests.get(host).get(i);
+				float f = m_PingTests.get(host).get(i);
 				
-				if(l > maxPing) {
-					maxPing = l;
+				if(f > maxPing) {
+					maxPing = f;
 				}
 				
-				if(l < minPing) {
-					minPing = l;
+				if(f < minPing) {
+					minPing = f;
 				}
 				
-				avgPing += l;
+				avgPing += f;
 				
-				ret.getJSONObject(host).getJSONObject("ping").put(""+i,l);
+				ret.getJSONObject(host).getJSONObject("ping").put(""+i,f);
 			}
 			
 			ret.getJSONObject(host).put("maxpingms",maxPing);
@@ -288,7 +288,7 @@ public class StatisticHandler {
 		return ret;
 	}
 	
-	public void addHostPingTimes(String hostname, ArrayList<Long> values) {
+	public void addHostPingTimes(String hostname, ArrayList<Float> values) {
 		m_PingTests.put(hostname, values);
 	}
 	
