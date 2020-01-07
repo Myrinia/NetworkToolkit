@@ -253,19 +253,25 @@ public class StatisticSaver {
 				key = 1;
 			}
 			
-			String MB = BitByteManager.humanReadableByteCountBin(  (long)value,true);
-			String mbit = BitByteManager.humanReadableBitCountBin( (long)value,true);
+			String MiB = BitByteManager.humanReadableByteCountBin(  (long)value,true);
+			String Mibit = BitByteManager.humanReadableBitCountBin( (long)value,true);
+			String MB = BitByteManager.humanReadableByteCountSI(  (long)value,true);
+			String Mbit = BitByteManager.humanReadableBitCountSI( (long)value );
 			
 			sb.append( key );
 			sb.append(" - ");
 			sb.append( value );
 
 			sb.append(" -- [");
-
-			sb.append( MB );
-			sb.append("]/[");
-			sb.append( mbit );
+			sb.append( MiB );
+			sb.append("] / [");
+			sb.append( Mibit );
 			sb.append("]");
+			sb.append(" -- [");
+			sb.append( MB );
+			sb.append("] / [");
+			sb.append( Mbit );
+			sb.append("it/s]"); // Fix for  MB  to MBit/s
 			sb.append("\n");
 		}
 		return sb.toString();
