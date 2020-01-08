@@ -3,16 +3,10 @@ package NetworkToolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Paths;
-
 import javax.swing.Timer;
 
 
@@ -33,25 +27,21 @@ public class BackgroundDownloadThread implements Runnable {
 	}
 	
 	private void startDownload() {
-		URL url;
+		
 		try {
-			url = new URL(m_DownloadUrl);
+			URL url = new URL(m_DownloadUrl);
 			setTargetFileSize(url);
 			m_TestRunning = true;
 			m_CountdownTimer.start();
-			try (BufferedInputStream in = new BufferedInputStream(url.openStream());
-				FileOutputStream fileOutputStream = new FileOutputStream("TestFile")) {
-			    byte dataBuffer[] = new byte[524288];
+			try {
+				BufferedInputStream in = new BufferedInputStream(url.openStream());
+				byte dataBuffer[] = new byte[524288];
 			    int bytesRead;
 			    
 			    while (m_TestRunning && (bytesRead = in.read(dataBuffer, 0, 524288)) != -1) {
 			    	m_BytesLoaded += bytesRead;
 			    	Main.m_StatisticHandler.addHostSpeed(m_DownloadHostName, m_CurrentRunTime , m_BytesLoaded);
-			        fileOutputStream.write(dataBuffer, 0, bytesRead);
 			    }
-			    
-			    fileOutputStream.flush();
-			    fileOutputStream.close();
 			    
 			} catch (IOException e) {
 				System.out.println("Download Error");
@@ -60,32 +50,11 @@ public class BackgroundDownloadThread implements Runnable {
 			}
 
 			m_CountdownTimer.stop();
-			deleteTestfile();
 			
 		} catch (MalformedURLException e1) {
 			m_CountdownTimer.stop();
 			m_TestRunning = false;
 		}
-	}
-
-	private void deleteTestfile() {
-		try { 
-            if(Files.exists(Paths.get("TestFile")))
-            {
-            	Files.delete(Paths.get("TestFile"));
-            	System.out.println("TestFile removed!");
-            }else
-            {
-            	System.out.println("TestFile Does not exist!");
-            }
-        } catch(NoSuchFileException e) { 
-            System.out.println("No such file/directory exists"); 
-        } catch(DirectoryNotEmptyException e) { 
-            System.out.println("Directory is not empty."); 
-        } catch(IOException e) 
-        { 
-            System.out.println("Invalid permissions."); 
-        }
 	}
 
 	private void setTargetFileSize(URL url) {
