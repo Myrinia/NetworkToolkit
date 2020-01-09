@@ -42,11 +42,13 @@ public class Main {
 	final static JButton btnTestStarten = new JButton("Test Starten");
 	final static JButton btnKonfiguration = new JButton("Konfigurieren");
 	final static JButton btnAbortTest = new JButton("Test Abbrechen");
+	final static JButton btnShowStatistics = new JButton("Zeige Statistik.");
 	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -97,11 +99,13 @@ public class Main {
 		btnKonfiguration.setBackground(new Color(255, 255, 255));
 		btnTestStarten.setBackground(new Color(255, 255, 255));
 		btnAbortTest.setBackground(new Color(255, 255, 255));
+		btnShowStatistics.setBackground(new Color(255, 255, 255));
 		
 		btnTestStarten.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				btnTestStarten.setVisible(false);
 				btnAbortTest.setVisible(true);
+				btnShowStatistics.setVisible(false);
 				m_ConfigPanel.setVisible(false);
 				m_StatusPanel.setVisible(true);
 				m_BackgroundTestHandler.startTest();
@@ -119,18 +123,27 @@ public class Main {
 		btnAbortTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				btnTestStarten.setVisible(true);
+				btnShowStatistics.setVisible(true);
 				btnAbortTest.setVisible(false);
 				m_BackgroundTestHandler.stopTest();
 			}
 		});
-	
-		btnAbortTest.setBounds(380, 3, 180, 60);
+		
+		btnShowStatistics.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new StatisticViewer();
+			}
+		});
+		
 		btnTestStarten.setBounds(10, 3, 180, 60);
 		btnKonfiguration.setBounds(195, 3, 180, 60);
+		btnAbortTest.setBounds(380, 3, 180, 60);
+		btnShowStatistics.setBounds(380, 3, 180, 60);
 		
 		MainFrame.getContentPane().add(btnTestStarten);
 		MainFrame.getContentPane().add(btnKonfiguration);
 		MainFrame.getContentPane().add(btnAbortTest);
+		MainFrame.getContentPane().add(btnShowStatistics);
 		
 		btnAbortTest.setVisible(false);
 		m_StatusPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(173, 216, 230), new Color(173, 216, 230), new Color(173, 216, 230), new Color(173, 216, 230)));
