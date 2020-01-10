@@ -127,7 +127,20 @@ public class StatisticHandler {
 			float minping = 10000.f;
 			float maxping = 0.f;
 			float avgping = 0;
-			for(float f : m_PingTests.get(host)) {
+			float previousping = 0.f;
+			float jitterDelta = 0.f;
+			for(int i = 0; i < m_PingTests.get(host).size(); i++ ) {
+				float f = m_PingTests.get(host).get(i);
+				if(i > 0)
+				{
+					// Calculate jitter
+					float deltaadd =  previousping > f ? previousping - f : f - previousping;
+					jitterDelta += deltaadd;
+					
+				}
+				
+				previousping = f;
+				
 				obj.put(""+elements,f);
 				elements++;
 				
@@ -145,7 +158,7 @@ public class StatisticHandler {
 			obj.put("minpingms", minping);
 			obj.put("maxpingms", maxping);
 			obj.put("avgpingms", avgping/elements);
-			obj.put("jitterms", maxping-minping);
+			obj.put("jitterms", jitterDelta/m_PingTests.get(host).size());
 			ret.put(host, obj);
 		}
 		
@@ -189,8 +202,20 @@ public class StatisticHandler {
 			}
 			
 			int pingscaptures = m_PingTests.get(host).size();
+			
+			float jitterDelta = 0.f;
+			float previousping = 0.f;
 			for(int i = 0; i < pingscaptures; i++ ) {
 				float f = m_PingTests.get(host).get(i);
+				
+				if(i > 0)
+				{
+					// Calculate jitter
+					float deltaadd =  previousping > f ? previousping - f : f - previousping;
+					jitterDelta += deltaadd;
+				}
+				
+				previousping = f;
 				
 				if(f > maxPing) {
 					maxPing = f;
@@ -208,7 +233,7 @@ public class StatisticHandler {
 			ret.getJSONObject(host).put("maxpingms",maxPing);
 			ret.getJSONObject(host).put("minpingms",minPing);
 			ret.getJSONObject(host).put("avgpingms",avgPing/pingscaptures );
-			ret.getJSONObject(host).put("jitterms", maxPing-minPing);
+			ret.getJSONObject(host).put("jitterms", jitterDelta/pingscaptures);
 		}
 		
 		Iterator<String> itrspeed = m_SpeedTests.keySet().iterator();
