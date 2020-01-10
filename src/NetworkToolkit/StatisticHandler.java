@@ -35,6 +35,8 @@ public class StatisticHandler {
 		JSONObject PingTests = getPingTestStatisticAsJSON();
 		JSONObject TraceTests = getTraceTestStatisticAsJSON();
 		
+		new StatisticViewer().runViewer(PingTests,m_StatisticSaver.getStatisticFolderName()+"AllPingTests.json");
+		
 		m_StatisticSaver.saveStatisticFile("AllSpeedTests.json", SpeedTests);
 		m_StatisticSaver.saveStatisticFile("AllPingTests.json", PingTests);
 		m_StatisticSaver.saveStatisticFile("AllTraceTests.json", TraceTests);

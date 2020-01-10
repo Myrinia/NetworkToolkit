@@ -132,7 +132,7 @@ public class Main {
 		btnShowStatistics.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					new StatisticViewer();
+					new StatisticViewer().startUsingFileSelection();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					// e.printStackTrace();

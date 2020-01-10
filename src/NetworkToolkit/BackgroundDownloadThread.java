@@ -124,7 +124,6 @@ public class BackgroundDownloadThread implements Runnable {
 		float seconds = m_CurrentRunTime/1000;
 		
 		return (float)Math.round((float) ((m_BytesLoaded*8/1024.f/1024.f)/seconds)*100) /100.f;
-		
 	}
 
 	public float getMBperSecond() {

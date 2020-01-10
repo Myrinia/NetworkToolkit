@@ -97,7 +97,9 @@ public class StatisticSaver {
 			
 			String folder = m_StatisticFolderName+folderkey;
 			CreateFolderIfNotExist(folder);
-			saveStatisticFile(folderkey+"/pingtest.json", new JSONObject().put(key, pingTests.getJSONObject(key)));
+			JSONObject testresult = new JSONObject().put(key, pingTests.getJSONObject(key));
+			saveStatisticFile(folderkey+"/pingtest.json", testresult);
+			new StatisticViewer().runViewer(testresult,m_StatisticFolderName+folderkey+"/pingtest.json", false);
 			saveStatisticFile(folderkey+"/Readable_pingtest.txt", toRawStringPingData(pingTests.getJSONObject(key)));
 			saveStatisticFile(folderkey+"/Forum_BBCode_pingtest.txt", generateBBCodeForumPingTest(key, pingTests.getJSONObject(key)));
 		}

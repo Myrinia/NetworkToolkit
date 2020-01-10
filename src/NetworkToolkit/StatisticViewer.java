@@ -2,24 +2,26 @@ package NetworkToolkit;
 
 import java.awt.BorderLayout;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtils;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import org.json.JSONObject;
-import org.knowm.xchart.XChartPanel;
-import org.knowm.xchart.XYChart;
-import org.knowm.xchart.XYChartBuilder;
-import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
-import org.knowm.xchart.style.Styler.LegendPosition;
 
 public class StatisticViewer {
 
@@ -31,7 +33,12 @@ public class StatisticViewer {
 	private final int STATISTIC_TYPE_TRACE = 4;
 	
 	
-	public StatisticViewer() throws Exception
+	public StatisticViewer() 
+	{
+		
+	}
+
+	public void startUsingFileSelection() throws Exception
 	{
 		JFileChooser c = new JFileChooser();
 		c.setCurrentDirectory(new File("./data/statistics"));
@@ -63,40 +70,47 @@ public class StatisticViewer {
 			
 			JSONObject statisticData = loadStatisticFile(f);
 			
-			System.out.println(statisticData);
+			runViewer(statisticData,f.getAbsolutePath());
 			
-			switch(validateData(statisticData))
-			{
-				case STATISTIC_TYPE_SPEED:
-				{
-					System.out.println(f.getAbsolutePath() + "=> STATISTIC_TYPE_SPEED.");
-					break;
-				}
-				case STATISTIC_TYPE_PING:
-				{
-					System.out.println(f.getAbsolutePath() + "=> STATISTIC_TYPE_PING.");
-					showPingStatistics(statisticData,f);
-					break;
-				}
-				case STATISTIC_TYPE_TRACE:
-				{
-					System.out.println(f.getAbsolutePath() + "=> STATISTIC_TYPE_TRACE.");
-					break;
-				}
-				case STATISTIC_TYPE_ALL:
-				{
-					System.out.println(f.getAbsolutePath() + "=> STATISTIC_TYPE_ALL.");
-					break;
-				}
-				case STATISTIC_TYPE_UNKNOWN:
-				{
-					System.out.println(f.getAbsolutePath() + "=> STATISTIC_TYPE_UNKNOWN.");
-					break;
-				}
-			}
 		}
 	}
 	
+	public void runViewer(final JSONObject statisticData,final String path) {
+		runViewer(statisticData, path, true);
+	}
+	
+	public void runViewer(final JSONObject statisticData,final String path, final boolean showGraph) {
+		switch(validateData(statisticData))
+		{
+			case STATISTIC_TYPE_SPEED:
+			{
+				System.out.println(path + "=> STATISTIC_TYPE_SPEED.");
+				break;
+			}
+			case STATISTIC_TYPE_PING:
+			{
+				System.out.println(path + "=> STATISTIC_TYPE_PING.");
+				showPingStatistics(statisticData, path, showGraph );
+				break;
+			}
+			case STATISTIC_TYPE_TRACE:
+			{
+				System.out.println(path + "=> STATISTIC_TYPE_TRACE.");
+				break;
+			}
+			case STATISTIC_TYPE_ALL:
+			{
+				System.out.println(path + "=> STATISTIC_TYPE_ALL.");
+				break;
+			}
+			case STATISTIC_TYPE_UNKNOWN:
+			{
+				System.out.println(path + "=> STATISTIC_TYPE_UNKNOWN.");
+				break;
+			}
+		}
+	}
+
 	private int validateData(JSONObject statisticData) {
 		
 		Iterator<String> dataitr = statisticData.keySet().iterator();
@@ -151,26 +165,17 @@ public class StatisticViewer {
 		return new JSONObject(new String(Files.readAllBytes(Paths.get(f.getAbsolutePath()))).trim());
 	}
 
-	private void showPingStatistics(final JSONObject statisticData,final File file)
+	private void showPingStatistics(final JSONObject statisticData,final String file, boolean showGraph)
 	{
-		// Create Chart
-		
-		final XYChart chart = new XYChartBuilder().width(600).height(400).xAxisTitle("Zeit").yAxisTitle("Pingzeit").build();
-		
-		// Customize Chart
-		chart.getStyler().setLegendPosition(LegendPosition.InsideNW);
-	    chart.getStyler().setChartPadding(30);
-		chart.getStyler().setDefaultSeriesRenderStyle(XYSeriesRenderStyle.Line);
-		chart.getStyler().setAntiAlias(true);
-		// Series
+		XYSeriesCollection xyDataset = new XYSeriesCollection();
 		
 		Iterator<String> pingItr = statisticData.keySet().iterator();
 		while(pingItr.hasNext()){
 			String hostname = pingItr.next();
 			JSONObject subData = statisticData.getJSONObject(hostname);
-			ArrayList<Double> pingtimes = new ArrayList<Double>();
 			Iterator<String> subItr = subData.keySet().iterator();
-			chart.addInfoContent("Test info content");
+			final XYSeries chartdata = new XYSeries(hostname);
+			int id = 0;
 			while(subItr.hasNext()){
 				String subKey = subItr.next();
 				
@@ -183,47 +188,54 @@ public class StatisticViewer {
 				{
 					continue;
 				}
-				pingtimes.add(subData.getDouble(subKey));
+				chartdata.add(id, subData.getDouble(subKey));
+				id ++;
 			}
-
-			double[] steps = new double[pingtimes.size()];
-			double[] timings = new double[pingtimes.size()];
-			
-			for(int i = 0; i < pingtimes.size(); i++) {
-				steps[i] = i;
-				timings[i] = pingtimes.get(i);
-			}
-			
-			chart.addSeries(hostname, steps, timings);
-			
+			xyDataset.addSeries(chartdata);
 		}
 		
-		// Schedule a job for the event-dispatching thread:
-		// creating and showing this application's GUI.
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-
-		  @Override
-		  public void run() {
-
-		    // Create and set up the window.
-		    JFrame frame = new JFrame(file.getName());
-		    frame.setLayout(new BorderLayout());
-		    frame.setBounds(0,0, 900,900);
-		    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		    // chart
-		    JPanel chartPanel = new XChartPanel<XYChart>(chart);
-		    frame.add(chartPanel, BorderLayout.CENTER);
-
-		    // label
-		    JLabel label = new JLabel("", SwingConstants.CENTER);
-		    frame.add(label, BorderLayout.SOUTH);
-
-		    // Display the window.
-		    frame.pack();
-		    frame.setVisible(true);
-		  }
-		});
+		final JFreeChart chart = ChartFactory.createXYLineChart("Pingverlauf zu: "+file, "Pings", "Milliseconds", xyDataset);
+		chart.setAntiAlias(true);
+		
+		
+	    try {
+	    	OutputStream out = new FileOutputStream(file+".png");
+			ChartUtils.writeChartAsPNG(out,
+					chart,
+					500,
+					300);
+			System.out.println("Saved: Image_File: "+ file + ".png");
+		} catch (IOException e) {
+			System.out.println("Error saving Image_File: "+ file+".png");
+		}
+	    
+	    if ( showGraph )
+	    {
+			javax.swing.SwingUtilities.invokeLater(new Runnable() {
+	
+				  @Override
+				  public void run() {
+	
+				    // Create and set up the window.
+				    JFrame frame = new JFrame(file);
+				    frame.setLayout(new BorderLayout());
+				    frame.setBounds(0,0, 900,900);
+				    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	
+				    // chart
+				    ChartPanel pnl = new ChartPanel(chart);
+				    frame.add(pnl, BorderLayout.CENTER);
+	
+				    // label
+				    JLabel label = new JLabel("", SwingConstants.CENTER);
+				    frame.add(label, BorderLayout.SOUTH);
+	
+				    // Display the window.
+				    frame.pack();
+				    frame.setVisible(true);
+				  }
+				});
+	    }
 	}
 	
 }
