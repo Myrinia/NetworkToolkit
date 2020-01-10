@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 import javax.swing.JFileChooser;
@@ -85,6 +87,7 @@ public class StatisticViewer {
 			case STATISTIC_TYPE_SPEED:
 			{
 				System.out.println(path + "=> STATISTIC_TYPE_SPEED.");
+				showSpeedStatistics(statisticData, path, showGraph );
 				break;
 			}
 			case STATISTIC_TYPE_PING:
@@ -165,6 +168,106 @@ public class StatisticViewer {
 		return new JSONObject(new String(Files.readAllBytes(Paths.get(f.getAbsolutePath()))).trim());
 	}
 
+	private void showSpeedStatistics(final JSONObject statisticData,final String file, boolean showGraph)
+	{
+		XYSeriesCollection xyDataset = new XYSeriesCollection();
+		
+		Iterator<String> speedItr = statisticData.keySet().iterator();
+		while(speedItr.hasNext()){
+			String hostname = speedItr.next();
+			JSONObject subData = statisticData.getJSONObject(hostname);
+			Iterator<String> subItr = subData.keySet().iterator();
+			final XYSeries chartdataMB = new XYSeries(hostname+"[MB/s]");
+			final XYSeries chartdataMBit = new XYSeries(hostname+"[MBit/s]");
+
+			ArrayList<Integer> speedids = new ArrayList<Integer>();
+			while(subItr.hasNext()){
+				String subKey = subItr.next();
+				
+				if(
+						subKey.equals("averageMBitps") || 
+						subKey.equals("averageMBps") || 
+						subKey.equals("maxMBitps") || 
+						subKey.equals("maxMBps")
+					)
+				{
+					continue;
+				}
+				
+				speedids.add(Integer.valueOf(subKey));
+			}
+			
+			Collections.sort(speedids);
+			
+			
+			for(int i = 0; i < speedids.size(); i++){
+				
+				int key = speedids.get(i);
+				long value = subData.getLong(""+key);
+				System.out.println("Key: " + key + " --- " + value);
+				
+				float calckey = ((float)key)/1000;
+				
+				if(calckey==0)
+				{
+					calckey = 1;
+				}
+				
+				double toMbit = ((double)value)/1024/1024/calckey;
+				
+				chartdataMB.add(key, toMbit);
+				chartdataMBit.add(key, toMbit*8);
+			}
+			
+			xyDataset.addSeries(chartdataMB);
+			xyDataset.addSeries(chartdataMBit);
+			
+		}
+		
+		final JFreeChart chart = ChartFactory.createXYLineChart("SpeedVerlauf zu: "+file, "Zeitlicher Verlauf(Sekunden)", "Speed", xyDataset);
+		chart.setAntiAlias(true);
+		
+		
+	    try {
+	    	OutputStream out = new FileOutputStream(file+".png");
+			ChartUtils.writeChartAsPNG(out,
+					chart,
+					500,
+					300);
+			System.out.println("Saved: Image_File: "+ file + ".png");
+		} catch (IOException e) {
+			System.out.println("Error saving Image_File: "+ file+".png");
+		}
+	    
+	    if ( showGraph )
+	    {
+			javax.swing.SwingUtilities.invokeLater(new Runnable() {
+	
+				  @Override
+				  public void run() {
+	
+				    // Create and set up the window.
+				    JFrame frame = new JFrame(file);
+				    frame.setLayout(new BorderLayout());
+				    frame.setBounds(0,0, 900,900);
+				    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	
+				    // chart
+				    ChartPanel pnl = new ChartPanel(chart);
+				    frame.add(pnl, BorderLayout.CENTER);
+	
+				    // label
+				    JLabel label = new JLabel("", SwingConstants.CENTER);
+				    frame.add(label, BorderLayout.SOUTH);
+	
+				    // Display the window.
+				    frame.pack();
+				    frame.setVisible(true);
+				  }
+				});
+	    }
+	}
+	
 	private void showPingStatistics(final JSONObject statisticData,final String file, boolean showGraph)
 	{
 		XYSeriesCollection xyDataset = new XYSeriesCollection();
@@ -237,5 +340,4 @@ public class StatisticViewer {
 				});
 	    }
 	}
-	
 }

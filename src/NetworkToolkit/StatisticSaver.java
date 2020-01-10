@@ -82,7 +82,9 @@ public class StatisticSaver {
 			String folderkey = removeToxicChars(key);
 			String folder = m_StatisticFolderName+folderkey;
 			CreateFolderIfNotExist(folder);
-			saveStatisticFile(folderkey+"/speedtest.json", new JSONObject().put(key, speedTests.getJSONObject(key)));
+			JSONObject testresult = new JSONObject().put(key, speedTests.getJSONObject(key));
+			saveStatisticFile(folderkey+"/speedtest.json", testresult);
+			new StatisticViewer().runViewer(testresult,m_StatisticFolderName+folderkey+"/speedtest.json", false);
 			saveStatisticFile(folderkey+"/Readable_speedtest.txt", toRawStringSpeedData(speedTests.getJSONObject(key)));
 		}
 	}
