@@ -131,7 +131,13 @@ public class Main {
 		
 		btnShowStatistics.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new StatisticViewer();
+				try {
+					new StatisticViewer();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					// e.printStackTrace();
+					System.out.println("Error viewing Statistic File: " + e.getMessage());
+				}
 			}
 		});
 		

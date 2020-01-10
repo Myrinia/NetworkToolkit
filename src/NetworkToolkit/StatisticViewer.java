@@ -120,14 +120,19 @@ public class StatisticViewer {
 			}catch(Exception e)
 			{
 				System.out.println("Maybe Tracetest?");
+				hasTraceData = true;
 			}
 		}
 		
 		
-		if(hasSpeedData && hasPingData) {
+		if(
+				hasSpeedData && hasPingData  ||
+				hasSpeedData && hasTraceData ||
+				hasTraceData && hasPingData
+				) {
+
 			return STATISTIC_TYPE_ALL;
 		}
-		
 		if(hasSpeedData) {
 			return STATISTIC_TYPE_SPEED;
 		}
@@ -135,7 +140,10 @@ public class StatisticViewer {
 		if(hasPingData) {
 			return STATISTIC_TYPE_PING;
 		}
-		
+		if(hasTraceData)
+		{
+			return STATISTIC_TYPE_TRACE;
+		}
 		return STATISTIC_TYPE_UNKNOWN;
 	}
 
