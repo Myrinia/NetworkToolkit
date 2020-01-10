@@ -144,8 +144,7 @@ public class VersionManagement {
 
 	private String getLatestVersionString() {
 	    try {
-        	URL url = new URL("https://raw.githubusercontent.com/Myrinia/NetworkToolkit/master/version");
-        
+        	URL url = new URL("https://raw.githubusercontent.com/Myrinia/NetworkToolkit/master/version?_=" + System.currentTimeMillis());
         	BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
         
             String line;
