@@ -1,6 +1,6 @@
 package NetworkToolkit;
 
-import java.awt.BorderLayout;
+import java.awt.Font;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,11 +9,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
 
@@ -170,8 +172,9 @@ public class StatisticViewer {
 
 	private void showSpeedStatistics(final JSONObject statisticData,final String file, boolean showGraph)
 	{
-		XYSeriesCollection xyDataset = new XYSeriesCollection();
+		HashMap<String, HashMap<String, Float>> testDetails = new HashMap<String, HashMap<String, Float>>();
 		
+		XYSeriesCollection xyDataset = new XYSeriesCollection();
 		Iterator<String> speedItr = statisticData.keySet().iterator();
 		while(speedItr.hasNext()){
 			String hostname = speedItr.next();
@@ -181,6 +184,7 @@ public class StatisticViewer {
 			final XYSeries chartdataMBit = new XYSeries(hostname+"[MBit/s]");
 
 			ArrayList<Integer> speedids = new ArrayList<Integer>();
+			HashMap<String,Float> detailDataSet = new HashMap<String,Float>();
 			while(subItr.hasNext()){
 				String subKey = subItr.next();
 				
@@ -191,14 +195,16 @@ public class StatisticViewer {
 						subKey.equals("maxMBps")
 					)
 				{
+					
+					detailDataSet.put(subKey, statisticData.getJSONObject(hostname).getFloat(subKey));
+					
 					continue;
 				}
 				
 				speedids.add(Integer.valueOf(subKey));
 			}
-			
+			testDetails.put(hostname, detailDataSet);
 			Collections.sort(speedids);
-			
 			
 			for(int i = 0; i < speedids.size(); i++){
 				
@@ -225,8 +231,6 @@ public class StatisticViewer {
 		}
 		
 		final JFreeChart chart = ChartFactory.createXYLineChart("SpeedVerlauf zu: "+file, "Zeitlicher Verlauf(Sekunden)", "Speed", xyDataset);
-		chart.setAntiAlias(true);
-		
 		
 	    try {
 	    	OutputStream out = new FileOutputStream(file+".png");
@@ -241,36 +245,137 @@ public class StatisticViewer {
 	    
 	    if ( showGraph )
 	    {
-			javax.swing.SwingUtilities.invokeLater(new Runnable() {
-	
-				  @Override
-				  public void run() {
-	
-				    // Create and set up the window.
-				    JFrame frame = new JFrame(file);
-				    frame.setLayout(new BorderLayout());
-				    frame.setBounds(0,0, 900,900);
-				    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	
-				    // chart
-				    ChartPanel pnl = new ChartPanel(chart);
-				    frame.add(pnl, BorderLayout.CENTER);
-	
-				    // label
-				    JLabel label = new JLabel("", SwingConstants.CENTER);
-				    frame.add(label, BorderLayout.SOUTH);
-	
-				    // Display the window.
-				    frame.pack();
-				    frame.setVisible(true);
-				  }
-				});
+	    	showGraph(chart,file, testDetails);
 	    }
 	}
 	
+	private void showGraph(final JFreeChart chart,final String file,final HashMap<String,HashMap<String,Float>> testDetails) {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			  @Override
+			  public void run() {
+				 
+				  
+				Font font = new Font("Times New Roman", Font.BOLD , 14);
+				chart.getTitle().setFont(font);
+				  
+			    // Create and set up the window.
+			    JFrame frame = new JFrame(file);
+			    frame.setBounds(0,0,1024,1000);
+			    frame.setLayout(null);
+			    
+			    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+			    // chart
+			    ChartPanel chartPanel = new ChartPanel(chart);
+			    chartPanel.setBounds(0,0,800,900);
+			    JPanel DetailsPanel = new JPanel();
+			    DetailsPanel.setLayout(null);
+			    
+			    DetailsPanel.setBounds(800,0,200,900);
+			    
+			    // Set Detail Data
+			    int paddingtop = 0;
+			    if(testDetails != null)
+				{
+					Iterator<String> DetailsItr = testDetails.keySet().iterator();
+					
+					while(DetailsItr.hasNext()) {
+						String host = DetailsItr.next();
+						System.out.println("Hostdata:" + host);
+						
+						JLabel hostnamelbl = new JLabel(host,SwingConstants.CENTER);
+						hostnamelbl.setBounds(0,paddingtop, 200, 25);
+						
+						paddingtop += 35;
+						
+						Iterator<String> HostDetailItr = testDetails.get(host).keySet().iterator();  
+						DetailsPanel.add(hostnamelbl);
+						
+						while(HostDetailItr.hasNext())
+						{
+							String detailkey = HostDetailItr.next();
+							float detailvalue = testDetails.get(host).get(detailkey);
+							System.out.println("-" + keyToNiceName(detailkey) + " => " + detailvalue);
+							
+							JLabel detaillblname = new JLabel(keyToNiceName(detailkey),SwingConstants.CENTER);
+							detaillblname.setBounds(0,paddingtop, 100, 25);
+							
+							JLabel detaillbldata = new JLabel(" " + detailvalue,SwingConstants.CENTER);
+							detaillbldata.setBounds(105,paddingtop, 100, 25);
+							paddingtop += 20;
+							
+							DetailsPanel.add(detaillblname);
+							DetailsPanel.add(detaillbldata);
+
+						}
+						paddingtop += 35;
+					}
+				}
+			    
+			    // End Set Detail Data
+			    
+			    JPanel FrameLayout = new JPanel();
+			    FrameLayout.setBounds(0,0,1024,1000);
+			    FrameLayout.setLayout(null);
+			    
+			    FrameLayout.add(chartPanel);
+			    FrameLayout.add(DetailsPanel);
+			    
+			    frame.add(FrameLayout);
+			    
+			    frame.setVisible(true);
+			  }
+
+			private String keyToNiceName(String detailkey) {
+				
+				switch(detailkey)
+				{
+					// PingTests
+					case "maxMBitps":
+					{
+						return "Max. MBit/s:";
+					}
+					case "maxMBps":
+					{
+						return "Max. MB/s:";
+					}
+					case "averageMBps":
+					{
+						return "Avg. MB/s:";
+					}
+					case "averageMBitps":
+					{
+						return "Avg. MBit/s:";
+					}
+					// SpeedTests
+					case "maxpingms":
+					{
+						return "Max. Ping[ms]:";
+					}
+					case "minpingms":
+					{
+						return "Min. Ping[ms]:";
+					}
+					case "jitterms":
+					{
+						return "Jitter[ms]:";
+					}
+					case "avgpingms":
+					{
+						return "Avg. Ping[ms]:";
+					}
+					
+				}
+				
+				return "unk. - " + detailkey;
+			}
+		});
+	}
+
 	private void showPingStatistics(final JSONObject statisticData,final String file, boolean showGraph)
 	{
 		XYSeriesCollection xyDataset = new XYSeriesCollection();
+		HashMap<String, HashMap<String, Float>> testDetails = new HashMap<String, HashMap<String, Float>>();
 		
 		Iterator<String> pingItr = statisticData.keySet().iterator();
 		while(pingItr.hasNext()){
@@ -279,6 +384,8 @@ public class StatisticViewer {
 			Iterator<String> subItr = subData.keySet().iterator();
 			final XYSeries chartdata = new XYSeries(hostname);
 			int id = 0;
+			HashMap<String,Float> detailDataSet = new HashMap<String,Float>();
+			
 			while(subItr.hasNext()){
 				String subKey = subItr.next();
 				
@@ -289,12 +396,17 @@ public class StatisticViewer {
 						subKey.equals("jitterms")
 					)
 				{
+					detailDataSet.put(subKey, statisticData.getJSONObject(hostname).getFloat(subKey));
 					continue;
 				}
 				chartdata.add(id, subData.getDouble(subKey));
 				id ++;
+
+				testDetails.put(hostname, detailDataSet);
+
 			}
 			xyDataset.addSeries(chartdata);
+			
 		}
 		
 		final JFreeChart chart = ChartFactory.createXYLineChart("Pingverlauf zu: "+file, "Pings", "Milliseconds", xyDataset);
@@ -313,31 +425,8 @@ public class StatisticViewer {
 		}
 	    
 	    if ( showGraph )
-	    {
-			javax.swing.SwingUtilities.invokeLater(new Runnable() {
-	
-				  @Override
-				  public void run() {
-	
-				    // Create and set up the window.
-				    JFrame frame = new JFrame(file);
-				    frame.setLayout(new BorderLayout());
-				    frame.setBounds(0,0, 900,900);
-				    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	
-				    // chart
-				    ChartPanel pnl = new ChartPanel(chart);
-				    frame.add(pnl, BorderLayout.CENTER);
-	
-				    // label
-				    JLabel label = new JLabel("", SwingConstants.CENTER);
-				    frame.add(label, BorderLayout.SOUTH);
-	
-				    // Display the window.
-				    frame.pack();
-				    frame.setVisible(true);
-				  }
-				});
+	    {	
+	    	showGraph(chart,file,testDetails);
 	    }
 	}
 }

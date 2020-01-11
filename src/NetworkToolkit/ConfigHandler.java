@@ -19,10 +19,9 @@ public class ConfigHandler {
 	private String m_ConfigFileName;
 	private ArrayList<HostConfigDataSet> m_ConfigHosts;
 	
-	public static int HOST_STATE_SPEED = 1;
-	public static int HOST_STATE_PING = 2;
-	public static int HOST_STATE_TRACE = 3;
-	
+	final public static int HOST_STATE_SPEED = 1;
+	final public static int HOST_STATE_PING = 2;
+	final public static int HOST_STATE_TRACE = 3;
 	
 	public ConfigHandler() {
 		CheckConfigDirExist();
@@ -206,6 +205,29 @@ public class ConfigHandler {
 		m_ConfigHosts = newConfig;
 		saveConfig();
 		loadConfig();
+	}
+
+	public void setTestsState(int state, boolean b) {
+		for(HostConfigDataSet s : m_ConfigHosts) {
+			switch(state)
+			{
+				case ConfigHandler.HOST_STATE_SPEED:
+				{
+					s.setSpeedTest(b);
+					break;
+				}
+				case ConfigHandler.HOST_STATE_PING:
+				{
+					s.setPingTest(b);
+					break;
+				}
+				case ConfigHandler.HOST_STATE_TRACE:
+				{
+					s.setTraceTest(b);
+					break;
+				}
+			}	
+		}
 	}
 	
 }

@@ -134,7 +134,6 @@ public class Main {
 				try {
 					new StatisticViewer().startUsingFileSelection();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					// e.printStackTrace();
 					System.out.println("Error viewing Statistic File: " + e.getMessage());
 				}
@@ -219,7 +218,7 @@ public class Main {
 		PNLHosts = new JPanel();
 		PNLHosts.setBackground(new Color(210, 105, 30));
 		PNLHosts.setForeground(new Color(224, 255, 255));
-		PNLHosts.setBounds(5, 130, 450, 200);
+		PNLHosts.setBounds(0, 130, 450, 200);
 		m_ConfigPanel.add(PNLHosts);
 
 		final JPanel pnlSetISPData = new JPanel();
@@ -327,7 +326,7 @@ public class Main {
 		pnlAddHost.add(btnNewButton);
 		
 		JButton btnKonfigurationSpeichern = new JButton("Speichern");
-		btnKonfigurationSpeichern.setBounds(450, 330, 100, 40);
+		btnKonfigurationSpeichern.setBounds(450, 250, 100, 35);
 		m_ConfigPanel.add(btnKonfigurationSpeichern);
 		
 		JButton btnAbbrechen = new JButton("Abbrechen");
@@ -339,7 +338,7 @@ public class Main {
 				loadStatusPanel();		
 			}
 		});
-		btnAbbrechen.setBounds(350, 330, 100, 40);
+		btnAbbrechen.setBounds(450, 215, 100, 35);
 		m_ConfigPanel.add(btnAbbrechen);
 		btnKonfigurationSpeichern.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -351,6 +350,103 @@ public class Main {
 				loadStatusPanel();
 			}
 		});
+		
+		JButton btnDisableSpeedTests = new JButton("Deaktiviere Speedtests");
+		JButton btnActivateSpeedTests = new JButton("Aktiviere Speedtests");
+		JButton btnDisablePingTests = new JButton("Deaktiviere Pingtests");
+		JButton btnActivatePingTests = new JButton("Aktiviere Pingtests");
+		JButton btnDisableTraceTests = new JButton("Deaktiviere Tracetests");
+		JButton btnActivateTraceTests = new JButton("Aktiviere Tracetests");
+		
+		btnDisableSpeedTests.setBounds(0  , 330, 170, 20);
+		btnActivateSpeedTests.setBounds(0 , 350, 170, 20);
+		btnDisablePingTests.setBounds(170 , 330, 170, 20);
+		btnActivatePingTests.setBounds(170, 350, 170, 20);
+		btnDisableTraceTests.setBounds(340 , 330, 170, 20);
+		btnActivateTraceTests.setBounds(340, 350, 170, 20);
+		
+		
+		
+		btnDisableSpeedTests.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				m_BackgroundTestHandler.stopTest();
+				m_ConfigHandler.setISPData(textFieldISPName.getText(), textFieldISPDown.getText(), textFieldISPUp.getText(),comboBoxConnectionType.getSelectedItem().toString());
+				m_ConfigHandler.setTestsState(ConfigHandler.HOST_STATE_SPEED, false);
+				m_ConfigHandler.saveConfig();
+				PNLHosts.removeAll();
+				LoadHostsIntoConfigPanel(PNLHosts);
+			}
+		});
+		btnActivateSpeedTests.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				m_BackgroundTestHandler.stopTest();
+				m_ConfigHandler.setISPData(textFieldISPName.getText(), textFieldISPDown.getText(), textFieldISPUp.getText(),comboBoxConnectionType.getSelectedItem().toString());
+				m_ConfigHandler.setTestsState(ConfigHandler.HOST_STATE_SPEED, true);
+				m_ConfigHandler.saveConfig();
+				PNLHosts.removeAll();
+				LoadHostsIntoConfigPanel(PNLHosts);
+			}
+		});
+		btnDisablePingTests.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				m_BackgroundTestHandler.stopTest();
+				m_ConfigHandler.setISPData(textFieldISPName.getText(), textFieldISPDown.getText(), textFieldISPUp.getText(),comboBoxConnectionType.getSelectedItem().toString());
+				m_ConfigHandler.setTestsState(ConfigHandler.HOST_STATE_PING, false);
+				m_ConfigHandler.saveConfig();
+				PNLHosts.removeAll();
+				LoadHostsIntoConfigPanel(PNLHosts);
+			}
+		});
+		btnActivatePingTests.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				m_BackgroundTestHandler.stopTest();
+				m_ConfigHandler.setISPData(textFieldISPName.getText(), textFieldISPDown.getText(), textFieldISPUp.getText(),comboBoxConnectionType.getSelectedItem().toString());
+				m_ConfigHandler.setTestsState(ConfigHandler.HOST_STATE_PING, true);
+				m_ConfigHandler.saveConfig();
+				PNLHosts.removeAll();
+				LoadHostsIntoConfigPanel(PNLHosts);
+			}
+		});
+		btnDisableTraceTests.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				m_BackgroundTestHandler.stopTest();
+				m_ConfigHandler.setISPData(textFieldISPName.getText(), textFieldISPDown.getText(), textFieldISPUp.getText(),comboBoxConnectionType.getSelectedItem().toString());
+				m_ConfigHandler.setTestsState(ConfigHandler.HOST_STATE_TRACE, false);
+				m_ConfigHandler.saveConfig();
+				PNLHosts.removeAll();
+				LoadHostsIntoConfigPanel(PNLHosts);
+			}
+		});
+		btnActivateTraceTests.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				m_BackgroundTestHandler.stopTest();
+				m_ConfigHandler.setISPData(textFieldISPName.getText(), textFieldISPDown.getText(), textFieldISPUp.getText(),comboBoxConnectionType.getSelectedItem().toString());
+				m_ConfigHandler.setTestsState(ConfigHandler.HOST_STATE_TRACE, true);
+				m_ConfigHandler.saveConfig();
+				PNLHosts.removeAll();
+				LoadHostsIntoConfigPanel(PNLHosts);
+			}
+		});
+		
+		m_ConfigPanel.add(btnDisableSpeedTests);
+		m_ConfigPanel.add(btnActivateSpeedTests);
+		m_ConfigPanel.add(btnDisablePingTests);
+		m_ConfigPanel.add(btnActivatePingTests);
+		m_ConfigPanel.add(btnDisableTraceTests);
+		m_ConfigPanel.add(btnActivateTraceTests);
+		
 		m_ConfigPanel.add(pnlAddHost);
 		LoadHostsIntoConfigPanel(PNLHosts);
 	}
