@@ -106,6 +106,9 @@ public class StatisticViewer {
 			case STATISTIC_TYPE_ALL:
 			{
 				System.out.println(path + "=> STATISTIC_TYPE_ALL.");
+				showPingStatistics(convertAllTestDataToPingOnlyData(statisticData), path, showGraph );
+				showSpeedStatistics(convertAllTestDataToSpeedOnlyData(statisticData), path, showGraph );
+				System.out.println(statisticData);
 				break;
 			}
 			case STATISTIC_TYPE_UNKNOWN:
@@ -115,6 +118,69 @@ public class StatisticViewer {
 			}
 		}
 	}
+
+	private JSONObject convertAllTestDataToSpeedOnlyData(JSONObject statisticData) {
+		JSONObject returnObject = new JSONObject();
+		
+		Iterator<String> mainItr = statisticData.keySet().iterator();
+		while(mainItr.hasNext()){
+			String host = mainItr.next();
+			JSONObject hostobject = statisticData.getJSONObject(host);
+			JSONObject newHostObjey = new JSONObject();
+			if(hostobject.has("rawspeeddata"))
+			{
+
+				newHostObjey.put("averageMBitps", hostobject.getFloat("averageMBitps"));
+				newHostObjey.put("averageMBps", hostobject.getFloat("averageMBps"));
+				newHostObjey.put("maxMBitps", hostobject.getFloat("maxMBitps"));
+				newHostObjey.put("maxMBps", hostobject.getFloat("maxMBps"));
+				
+				// Now add the Raw speed data
+				JSONObject rawspeedobj = statisticData.getJSONObject(host).getJSONObject("rawspeeddata");
+				Iterator<String> rawspeeditr = rawspeedobj.keySet().iterator();
+				while(rawspeeditr.hasNext()){
+					String rawspeedkey = rawspeeditr.next();
+					long bytes = rawspeedobj.getLong(rawspeedkey);
+					newHostObjey.put(rawspeedkey, bytes);
+				}
+				returnObject.put(host, newHostObjey);
+				
+			}
+		}
+		return returnObject;
+	}
+
+	private JSONObject convertAllTestDataToPingOnlyData(JSONObject statisticData) {
+		JSONObject returnObject = new JSONObject();
+		
+		Iterator<String> mainItr = statisticData.keySet().iterator();
+		while(mainItr.hasNext()){
+			String host = mainItr.next();
+			JSONObject hostobject = statisticData.getJSONObject(host);
+			JSONObject newHostObjey = new JSONObject();
+			if(hostobject.has("minpingms"))
+			{
+				newHostObjey.put("minpingms", hostobject.getFloat("minpingms"));
+				newHostObjey.put("maxpingms", hostobject.getFloat("maxpingms"));
+				newHostObjey.put("avgpingms", hostobject.getFloat("avgpingms"));
+				newHostObjey.put("jitterms", hostobject.getFloat("jitterms"));
+				
+				// Now add the Raw speed data
+				JSONObject rawspeedobj = statisticData.getJSONObject(host).getJSONObject("ping");
+				Iterator<String> rawspeeditr = rawspeedobj.keySet().iterator();
+				while(rawspeeditr.hasNext()){
+					String rawspeedkey = rawspeeditr.next();
+					float pingms = rawspeedobj.getFloat(rawspeedkey);
+					newHostObjey.put(rawspeedkey, pingms);
+				}
+				
+				returnObject.put(host, newHostObjey);
+				
+			}
+		}
+		return returnObject;
+	}
+
 
 	private int validateData(JSONObject statisticData) {
 		
@@ -199,6 +265,17 @@ public class StatisticViewer {
 					detailDataSet.put(subKey, statisticData.getJSONObject(hostname).getFloat(subKey));
 					
 					continue;
+				}else
+				{
+					if(
+							subKey.equals("minpingms") || 
+							subKey.equals("maxpingms") || 
+							subKey.equals("avgpingms") || 
+							subKey.equals("jitterms")
+						)
+					{
+						continue;
+					}
 				}
 				
 				speedids.add(Integer.valueOf(subKey));
@@ -398,6 +475,17 @@ public class StatisticViewer {
 				{
 					detailDataSet.put(subKey, statisticData.getJSONObject(hostname).getFloat(subKey));
 					continue;
+				}else
+				{
+					if(
+							subKey.equals("averageMBitps") || 
+							subKey.equals("averageMBps") || 
+							subKey.equals("maxMBitps") || 
+							subKey.equals("maxMBps")
+						)
+					{
+						continue;
+					}
 				}
 				chartdata.add(id, subData.getDouble(subKey));
 				id ++;
