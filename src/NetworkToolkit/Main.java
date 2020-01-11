@@ -42,7 +42,7 @@ public class Main {
 	final static JButton btnTestStarten = new JButton("Test Starten");
 	final static JButton btnKonfiguration = new JButton("Konfigurieren");
 	final static JButton btnAbortTest = new JButton("Test Abbrechen");
-	final static JButton btnShowStatistics = new JButton("Zeige Statistik.");
+	final static JButton btnShowStatistics = new JButton("Zeige Statistik");
 	
 	/**
 	 * Launch the application.
