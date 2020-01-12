@@ -1,5 +1,6 @@
 package NetworkToolkit;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,10 +13,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
 
@@ -347,13 +350,14 @@ public class StatisticViewer {
 			    chartPanel.setBounds(0,0,800,900);
 			    JPanel DetailsPanel = new JPanel();
 			    DetailsPanel.setLayout(null);
+			    DetailsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(),"Details:"));
 			    
-			    DetailsPanel.setBounds(800,0,200,900);
 			    
 			    // Set Detail Data
-			    int paddingtop = 0;
+			    int paddingtop = 5;
 			    if(testDetails != null)
 				{
+			    	
 					Iterator<String> DetailsItr = testDetails.keySet().iterator();
 					
 					while(DetailsItr.hasNext()) {
@@ -378,7 +382,7 @@ public class StatisticViewer {
 							detaillblname.setBounds(0,paddingtop, 100, 25);
 							
 							JLabel detaillbldata = new JLabel(" " + detailvalue,SwingConstants.CENTER);
-							detaillbldata.setBounds(105,paddingtop, 100, 25);
+							detaillbldata.setBounds(95,paddingtop, 100, 25);
 							paddingtop += 20;
 							
 							DetailsPanel.add(detaillblname);
@@ -387,6 +391,9 @@ public class StatisticViewer {
 						}
 						paddingtop += 35;
 					}
+					
+					DetailsPanel.setPreferredSize(new Dimension(200,paddingtop));
+				    
 				}
 			    
 			    // End Set Detail Data
@@ -396,7 +403,13 @@ public class StatisticViewer {
 			    FrameLayout.setLayout(null);
 			    
 			    FrameLayout.add(chartPanel);
-			    FrameLayout.add(DetailsPanel);
+			    
+			    JScrollPane scrollDetailsPane = new JScrollPane(DetailsPanel);
+			    scrollDetailsPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			    scrollDetailsPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			    scrollDetailsPane.setBounds(800,0,200,900);
+			    
+			    FrameLayout.add(scrollDetailsPane);
 			    
 			    frame.add(FrameLayout);
 			    
