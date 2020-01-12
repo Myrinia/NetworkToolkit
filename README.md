@@ -23,6 +23,4 @@ So the idea was born to create this Toolkit, to allow for everyone to test the i
 * No Ads
 * No Malware
 * No Spam 
-* No Junk..,  just a simple Speed, Ping, Tracetester
-
-## Current Version: V0.2.0
+* No Junk..,  just a simple Speed, Ping, Trace Tester
