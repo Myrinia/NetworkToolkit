@@ -89,7 +89,7 @@ public class Main {
 	private void setupAppFrame() {
 		MainFrame = new JFrame();
 		MainFrame.setResizable(false);
-		MainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/com/sun/java/swing/plaf/windows/icons/Computer.gif")));
+		MainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage("icon.gif"));
 		MainFrame.setTitle("NetworkToolkit by Myrinia@LTEForum.at");
 		MainFrame.getContentPane().setBackground(new Color(255, 255, 255));
 		MainFrame.setBounds(100, 100, 575, 470);
