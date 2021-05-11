@@ -154,11 +154,11 @@ public class StatisticHandler {
 					maxping = f;
 				}
 			}
-			
+						
 			obj.put("minpingms", minping);
 			obj.put("maxpingms", maxping);
 			obj.put("avgpingms", avgping/elements);
-			obj.put("jitterms", jitterDelta/m_PingTests.get(host).size());
+			obj.put("jitterms", jitterDelta/m_PingTests.get(host).size()+"");
 			ret.put(host, obj);
 		}
 		

@@ -19,7 +19,7 @@ import javax.swing.JTextArea;
 
 public class VersionManagement {
 
-	private final static String NETWORK_TOOLKIT_VERSION = "0.2.7";
+	private final static String NETWORK_TOOLKIT_VERSION = "0.2.8";
 	
 	private final JFrame f = new JFrame();
 	
@@ -45,7 +45,7 @@ public class VersionManagement {
 
 		f.setVisible(true);
 		f.setResizable(false);
-		f.setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/com/sun/java/swing/plaf/windows/icons/Computer.gif")));
+		f.setIconImage(Toolkit.getDefaultToolkit().getImage("icon.gif"));
 		f.setTitle("NetworkToolkit by Myrinia@LTEForum.at");
 		f.getContentPane().setBackground(new Color(255, 255, 255));
 		f.setBounds(100, 100, 500, 300);

@@ -88,11 +88,10 @@ public class Main {
 
 	private void setupAppFrame() {
 		MainFrame = new JFrame();
-		MainFrame.setResizable(false);
 		MainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage("icon.gif"));
 		MainFrame.setTitle("NetworkToolkit by Myrinia@LTEForum.at");
 		MainFrame.getContentPane().setBackground(new Color(255, 255, 255));
-		MainFrame.setBounds(100, 100, 575, 470);
+		MainFrame.setBounds(100, 100, 800, 603);
 		MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainFrame.getContentPane().setLayout(null);
 		
@@ -155,13 +154,13 @@ public class Main {
 		
 		m_StatusPanel.setLayout(null);
 		m_StatusPanel.setBackground(new Color(230, 230, 250));
-		m_StatusPanel.setBounds(10, 65, 550, 370);
+		m_StatusPanel.setBounds(10, 65, 774, 496);
 		MainFrame.getContentPane().add(m_StatusPanel);
 		
 		m_ConfigPanel.setLayout(null);
 		m_ConfigPanel.setBackground(new Color(255, 255, 255));
 		m_ConfigPanel.setVisible(false);
-		m_ConfigPanel.setBounds(10, 65, 550, 370);
+		m_ConfigPanel.setBounds(10, 65, 774, 496);
 		
 		MainFrame.getContentPane().add(m_ConfigPanel);
 	}
@@ -218,11 +217,11 @@ public class Main {
 		PNLHosts = new JPanel();
 		PNLHosts.setBackground(new Color(210, 105, 30));
 		PNLHosts.setForeground(new Color(224, 255, 255));
-		PNLHosts.setBounds(0, 130, 450, 200);
+		PNLHosts.setBounds(0, 130, 451, 355);
 		m_ConfigPanel.add(PNLHosts);
 
 		final JPanel pnlSetISPData = new JPanel();
-		pnlSetISPData.setBounds(300, 30, 250, 98);
+		pnlSetISPData.setBounds(300, 30, 464, 98);
 		pnlSetISPData.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(),"ISP Daten"));
 		pnlSetISPData.setBackground(new Color(192, 192, 192));
 		pnlSetISPData.setForeground(new Color(0, 0, 0));
@@ -233,19 +232,19 @@ public class Main {
 		pnlSetISPData.add(lblISPName);
 		
 		lblISPDown = new JLabel("Download:");
-		lblISPDown.setBounds(10, 35, 70, 20);
+		lblISPDown.setBounds(235, 15, 70, 20);
 		pnlSetISPData.add(lblISPDown);
 		
 		lblISPDownMbitBez = new JLabel("Mbit/s");
-		lblISPDownMbitBez.setBounds(155, 35, 50, 20);
+		lblISPDownMbitBez.setBounds(393, 15, 50, 20);
 		pnlSetISPData.add(lblISPDownMbitBez);
 		
 		lblISPUp = new JLabel("Upload:");
-		lblISPUp.setBounds(10, 55, 50, 20);
+		lblISPUp.setBounds(235, 46, 50, 20);
 		pnlSetISPData.add(lblISPUp);
 		
 		lblISPUpMbitBez = new JLabel("Mbit/s");
-		lblISPUpMbitBez.setBounds(155, 55, 50, 20);
+		lblISPUpMbitBez.setBounds(393, 46, 50, 20);
 		pnlSetISPData.add(lblISPUpMbitBez);
 		
 		textFieldISPName = new JTextField();
@@ -254,17 +253,17 @@ public class Main {
 		pnlSetISPData.add(textFieldISPName);
 		
 		textFieldISPDown = new JTextField();
-		textFieldISPDown.setBounds(75, 35, 70, 20);
+		textFieldISPDown.setBounds(289, 15, 94, 20);
 		textFieldISPDown.setText(m_ConfigHandler.getString("ISPDown"));
 		pnlSetISPData.add(textFieldISPDown);
 		
 		textFieldISPUp = new JTextField();
-		textFieldISPUp.setBounds(75, 55, 70, 20);
+		textFieldISPUp.setBounds(289, 46, 94, 20);
 		textFieldISPUp.setText(m_ConfigHandler.getString("ISPUp"));
 		pnlSetISPData.add(textFieldISPUp);
 		
 		lblConnectionType = new JLabel("Type:");
-		lblConnectionType.setBounds(10, 75, 50, 20);
+		lblConnectionType.setBounds(10, 46, 50, 20);
 		pnlSetISPData.add(lblConnectionType);
 		
 		String connectiontype[]= { "LTE","DSL","Kabel","5G","Glasfaser","Satellit","Other" };
@@ -280,7 +279,7 @@ public class Main {
 			selectedindex++;
 		}
 		
-		comboBoxConnectionType.setBounds(75,75,100,20);
+		comboBoxConnectionType.setBounds(75,46,150,20);
 		pnlSetISPData.add(comboBoxConnectionType);
 		
 		m_ConfigPanel.add(pnlSetISPData);
@@ -326,7 +325,7 @@ public class Main {
 		pnlAddHost.add(btnNewButton);
 		
 		JButton btnKonfigurationSpeichern = new JButton("Speichern");
-		btnKonfigurationSpeichern.setBounds(450, 250, 100, 35);
+		btnKonfigurationSpeichern.setBounds(614, 450, 150, 35);
 		m_ConfigPanel.add(btnKonfigurationSpeichern);
 		
 		JButton btnAbbrechen = new JButton("Abbrechen");
@@ -338,7 +337,7 @@ public class Main {
 				loadStatusPanel();		
 			}
 		});
-		btnAbbrechen.setBounds(450, 215, 100, 35);
+		btnAbbrechen.setBounds(461, 450, 143, 35);
 		m_ConfigPanel.add(btnAbbrechen);
 		btnKonfigurationSpeichern.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -358,12 +357,12 @@ public class Main {
 		JButton btnDisableTraceTests = new JButton("Deaktiviere Tracetests");
 		JButton btnActivateTraceTests = new JButton("Aktiviere Tracetests");
 		
-		btnDisableSpeedTests.setBounds(0  , 330, 170, 20);
-		btnActivateSpeedTests.setBounds(0 , 350, 170, 20);
-		btnDisablePingTests.setBounds(170 , 330, 170, 20);
-		btnActivatePingTests.setBounds(170, 350, 170, 20);
-		btnDisableTraceTests.setBounds(340 , 330, 170, 20);
-		btnActivateTraceTests.setBounds(340, 350, 170, 20);
+		btnDisableSpeedTests.setBounds(614  , 181, 150, 40);
+		btnActivateSpeedTests.setBounds(454 , 181, 150, 40);
+		btnDisablePingTests.setBounds(614 , 130, 150, 40);
+		btnActivatePingTests.setBounds(454, 130, 150, 40);
+		btnDisableTraceTests.setBounds(614 , 232, 150, 40);
+		btnActivateTraceTests.setBounds(454, 232, 150, 40);
 		
 		
 		
@@ -554,7 +553,7 @@ public class Main {
 		JScrollPane scrollPane = new JScrollPane(hostPanel);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setBounds(0, 0, 450, 200);
+        scrollPane.setBounds(0, 0, 450, 355);
         
 		PNLHosts.add(scrollPane);
 		
