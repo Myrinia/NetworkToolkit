@@ -19,7 +19,7 @@ import javax.swing.JTextArea;
 
 public class VersionManagement {
 
-	private final static String NETWORK_TOOLKIT_VERSION = "0.2.6";
+	private final static String NETWORK_TOOLKIT_VERSION = "0.2.7";
 	
 	private final JFrame f = new JFrame();
 	
